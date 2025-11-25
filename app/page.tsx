@@ -1,64 +1,131 @@
-import Image from "next/image";
+"use client";
+
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import tcgdex from "./utils/tcgdex";
+import SetList from "./components/SetList";
+import SeriesList from "./components/SeriesList";
+import CardList from "./components/CardList";
+import { CardResume, SerieResume, SetResume } from "@tcgdex/sdk";
+import { createLine } from "./utils/tcgplayer";
 
 export default function Home() {
+  const [copiedLabel, setCopiedLabel] = useState("");
+  const [textData, setTextData] = useState("");
+  const [selectedSeries, setSelectedSeries] = useState<
+    SerieResume | undefined
+  >();
+  const [selectedSet, setSelectedSet] = useState<SetResume | undefined>();
+  const [selectedCards, setSelectedCards] = useState<
+    Record<string, CardResume[]>
+  >({
+    holo: [],
+    reverse: [],
+    normal: [],
+  });
+
+  console.log("selectedCards", selectedCards);
+  const onAddCard = (card: CardResume, variant: string) => {
+    const cardData = {
+      ...selectedCards,
+      [variant]: [...selectedCards[variant], card],
+    };
+    setSelectedCards(cardData);
+
+    const tcgString = createLine(card.name, selectedSet!.name);
+    console.log(tcgString);
+    setTextData(textData + `${tcgString}\n`);
+  };
+
+  const copyOptions = useMemo(() => [{ label: "Copy" }], []);
+
+  const handleCopy = useCallback(
+    async (label: string) => {
+      try {
+        console.log("adding to clipboard...", textData);
+        await navigator.clipboard.writeText(textData);
+        setCopiedLabel(label);
+        setTimeout(() => setCopiedLabel(""), 1500);
+      } catch (error) {
+        console.error("Unable to copy list", error);
+      }
+    },
+    [setCopiedLabel]
+  );
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 dark:bg-black dark:text-zinc-50">
+      <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-6 py-16 lg:flex-row lg:items-stretch lg:gap-12">
+        <section className="flex flex-1 flex-col justify-center gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
+          <p className="inline-flex items-center rounded-full bg-zinc-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+            TCGplayer Mass Add
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+          <h1 className="text-4xl font-semibold leading-tight tracking-tight">
+            Build and paste a cardlist in seconds.
+          </h1>
+          {selectedSeries === undefined ? (
+            <SeriesList
+              onSelect={(v) => {
+                setSelectedSeries(v);
+              }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          ) : selectedSet === undefined ? (
+            <SetList
+              selectedSeries={selectedSeries}
+              onSelect={(v) => setSelectedSet(v)}
+              resetSeries={() => setSelectedSeries(undefined)}
+            />
+          ) : (
+            <CardList
+              selectedSeries={selectedSeries}
+              selectedSet={selectedSet}
+              onAddVariant={onAddCard}
+              resetSet={() => setSelectedSet(undefined)}
+            />
+          )}
+        </section>
+
+        <section className="mt-10 flex flex-1 flex-col rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0">
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            {copyOptions.map(({ label }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => handleCopy(label)}
+                className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+              >
+                {label}
+              </button>
+            ))}
+            <a
+              key="tcg-player"
+              href={`https://www.tcgplayer.com/massentry?c=${textData
+                .split("\n")
+                .join("||")}&productLine=Pokemon`}
+              className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+            >
+              Open TCGPlayer
+            </a>
+          </div>
+          <div className="flex-1 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+            <label
+              htmlFor="decklist-output"
+              className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
+            >
+              Generated Output
+            </label>
+            <textarea
+              id="decklist-output"
+              value={textData}
+              readOnly
+              className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
+            />
+          </div>
+          {copiedLabel && (
+            <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
+              {copiedLabel} copied to clipboard!
+            </p>
+          )}
+        </section>
       </main>
     </div>
   );
