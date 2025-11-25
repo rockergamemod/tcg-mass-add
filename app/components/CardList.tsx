@@ -86,7 +86,7 @@ export default function CardList({
               key={`${set.id}-${id}`}
               className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none"
             >
-              <span className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
+              <span className="flex h-28 aspect-[5/7] items-center justify-center overflow-hidden border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
                 {image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img

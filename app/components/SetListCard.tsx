@@ -23,7 +23,7 @@ export default function SetListCard({
           : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
       }`}
     >
-      <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
+      <span className="flex h-14 aspect-[5/2] items-center justify-center overflow-hidden rounded-xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
