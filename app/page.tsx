@@ -92,19 +92,17 @@ export default function Home() {
           )}
         </section>
 
-        {Object.entries(textData).map(([variant, text]) => {
-          return (
-            <div
-              key={variant}
-              className="mt-10 flex flex-1 flex-row rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0"
-            >
-              <section className="mt-10 flex flex-1 flex-col rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0">
+        <div className="flex flex-1 flex-col gap-6">
+          <section className="flex flex-col rounded-3xl border border-zinc-200 bg-white pt-4 p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
+            {Object.entries(textData).filter(
+              ([variant]) => textData[variant].length > 0
+            ).length === 0 ? (
+              <div className="pt-4">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
                   {copyOptions.map(({ label }) => (
                     <button
                       key={label}
                       type="button"
-                      onClick={() => handleCopy(label, variant)}
                       className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                     >
                       {label}
@@ -112,17 +110,14 @@ export default function Home() {
                   ))}
                   <a
                     key="tcg-player"
-                    href={`https://www.tcgplayer.com/massentry?c=${textData[
-                      variant
-                    ]
-                      .split("\n")
-                      .join("||")}&productLine=Pokemon`}
+                    aria-disabled
+                    href=""
                     className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                   >
                     Open TCGPlayer
                   </a>
                 </div>
-                <div className="flex-1 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
                   <label
                     htmlFor="decklist-output"
                     className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
@@ -131,20 +126,66 @@ export default function Home() {
                   </label>
                   <textarea
                     id="decklist-output"
-                    value={textData[variant]}
+                    value={""}
                     readOnly
                     className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
                   />
                 </div>
-                {copiedLabel && (
-                  <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
-                    {copiedLabel} copied to clipboard!
-                  </p>
-                )}
-              </section>
-            </div>
-          );
-        })}
+              </div>
+            ) : (
+              Object.entries(textData)
+                .filter(([variant]) => textData[variant].length > 0)
+                .map(([variant, text]) => {
+                  return (
+                    <div className="pt-4" key={variant}>
+                      <div className="mb-4 flex flex-wrap items-center gap-3">
+                        {copyOptions.map(({ label }) => (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => handleCopy(label, variant)}
+                            className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                          >
+                            {label}
+                          </button>
+                        ))}
+                        <a
+                          key="tcg-player"
+                          href={`https://www.tcgplayer.com/massentry?c=${textData[
+                            variant
+                          ]
+                            .split("\n")
+                            .join("||")}&productLine=Pokemon`}
+                          className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                        >
+                          Open TCGPlayer
+                        </a>
+                      </div>
+                      <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                        <label
+                          htmlFor="decklist-output"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
+                        >
+                          Generated Output [{variant}]
+                        </label>
+                        <textarea
+                          id="decklist-output"
+                          value={textData[variant]}
+                          readOnly
+                          className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+            )}
+            {copiedLabel && (
+              <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
+                {copiedLabel} copied to clipboard!
+              </p>
+            )}
+          </section>
+        </div>
       </main>
     </div>
   );

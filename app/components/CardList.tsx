@@ -38,6 +38,9 @@ const rarityVariantMap: Record<string, string[]> = {
   "Ultra Rare": ["holo"],
   "Special illustration rare": ["holo"],
   "Black White Rare": ["holo"],
+  // SV
+  "Hyper rare": ["holo"],
+  "ACE SPEC Rare": ["holo"],
   // MEGA
   "Mega Hyper Rare": ["holo"],
   // SWSH
