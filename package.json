@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tcgdex/sdk": "^2.7.1",
+    "install": "^0.13.0",
     "next": "16.0.4",
+    "npm": "^11.6.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
