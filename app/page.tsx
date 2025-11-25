@@ -5,8 +5,8 @@ import tcgdex from "./utils/tcgdex";
 import SetList from "./components/SetList";
 import SeriesList from "./components/SeriesList";
 import CardList from "./components/CardList";
-import { CardResume, SerieResume, SetResume } from "@tcgdex/sdk";
-import { createLine } from "./utils/tcgplayer";
+import { CardResume, Query, SerieResume, SetResume } from "@tcgdex/sdk";
+import { createLine, setNameToPrintedTotal } from "./utils/tcgplayer";
 
 export default function Home() {
   const [copiedLabel, setCopiedLabel] = useState("");
@@ -27,6 +27,28 @@ export default function Home() {
     normal: [],
   });
 
+  const [cards, setCards] = useState<CardResume[]>([]);
+  useEffect(() => {
+    if (!selectedSet) return;
+    tcgdex.card
+      .list(Query.create().equal("set", selectedSet.id))
+      .then((queriedCards) => {
+        Promise.all(queriedCards.map((c) => c.getCard())).then(
+          (mappedCards) => {
+            const rarities = mappedCards.reduce<string[]>((acc, c) => {
+              if (acc.includes(c.rarity)) {
+                return acc;
+              }
+              acc.push(c.rarity);
+              return acc;
+            }, []);
+            console.log("rarities", rarities);
+            setCards(mappedCards);
+          }
+        );
+      });
+  }, [selectedSeries, selectedSet]);
+
   console.log("selectedCards", selectedCards);
   const onAddCard = (card: CardResume, variant: string) => {
     const cardData = {
@@ -35,7 +57,18 @@ export default function Home() {
     };
     setSelectedCards(cardData);
 
-    const tcgString = createLine(card.name, selectedSet!.name);
+    let cardName = card.name;
+    const cardsWithName = cards.filter((c) =>
+      c.name.toLowerCase().includes(card.name.toLowerCase())
+    );
+    const numCardsWithName = cardsWithName.length;
+    if (numCardsWithName !== 1) {
+      console.log("card has multiple listed", card);
+      const printedTotal = setNameToPrintedTotal[selectedSet!.name];
+      cardName = `${card.name} - ${card.localId}/${printedTotal}`;
+    }
+
+    const tcgString = createLine(cardName, selectedSet!.name);
     console.log(tcgString);
     const newTextData = {
       ...textData,
@@ -88,6 +121,7 @@ export default function Home() {
               selectedSet={selectedSet}
               onAddVariant={onAddCard}
               resetSet={() => setSelectedSet(undefined)}
+              cards={cards}
             />
           )}
         </section>
@@ -155,7 +189,7 @@ export default function Home() {
                             variant
                           ]
                             .split("\n")
-                            .join("||")}&productLine=Pokemon`}
+                            .join("||")}&productline=Pokemon`}
                           className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                         >
                           Open TCGPlayer

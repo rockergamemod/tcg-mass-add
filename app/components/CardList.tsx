@@ -18,6 +18,7 @@ const VARIANT_LABELS: Record<VariantKey, string> = {
 };
 
 type CardListProps = {
+  cards: CardResume[];
   selectedSeries: SerieResume;
   selectedSet: SetResume;
   onAddVariant?: (card: CardResume, variant: string) => void;
@@ -32,7 +33,7 @@ type FetchSetReturnType = NonNullable<
 const rarityVariantMap: Record<string, string[]> = {
   Common: ["normal", "reverse"],
   Uncommon: ["normal", "reverse"],
-  Rare: ["holo"],
+  Rare: ["holo", "reverse"],
   "Double rare": ["holo"],
   "Illustration rare": ["holo"],
   "Ultra Rare": ["holo"],
@@ -57,31 +58,8 @@ export default function CardList({
   selectedSet,
   onAddVariant,
   resetSet,
+  cards,
 }: CardListProps) {
-  const [cards, setCards] = useState<FetchSetReturnType>();
-  useEffect(() => {
-    tcgdex.card
-      .list(Query.create().equal("set", selectedSet.id))
-      .then((cards) => {
-        console.log(cards);
-        if (cards) {
-          console.log(cards[2]);
-          cards[2].getCard().then((card) => console.log(card));
-          Promise.all(cards.map((c) => c.getCard())).then((mappedCards) => {
-            const rarities = mappedCards.reduce<string[]>((acc, c) => {
-              if (acc.includes(c.rarity)) {
-                return acc;
-              }
-              acc.push(c.rarity);
-              return acc;
-            }, []);
-            console.log(rarities);
-            setCards(mappedCards);
-          });
-        }
-      });
-  }, [selectedSeries, selectedSet]);
-
   if (!cards || !cards.length) {
     return (
       <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">

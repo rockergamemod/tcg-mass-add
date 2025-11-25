@@ -9,6 +9,13 @@ const setNameToCodeMap: Record<string, string> = setData.reduce<
   return acc;
 }, {});
 
+export const setNameToPrintedTotal: Record<string, number> = setData.reduce<
+  Record<string, number>
+>((acc, set) => {
+  acc[set.name] = set.printedTotal;
+  return acc;
+}, {});
+
 export function createLine(
   cardName: string,
   setName: string,
