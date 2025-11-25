@@ -10,7 +10,11 @@ import { createLine } from "./utils/tcgplayer";
 
 export default function Home() {
   const [copiedLabel, setCopiedLabel] = useState("");
-  const [textData, setTextData] = useState("");
+  const [textData, setTextData] = useState<Record<string, string>>({
+    holo: "",
+    reverse: "",
+    normal: "",
+  });
   const [selectedSeries, setSelectedSeries] = useState<
     SerieResume | undefined
   >();
@@ -33,16 +37,20 @@ export default function Home() {
 
     const tcgString = createLine(card.name, selectedSet!.name);
     console.log(tcgString);
-    setTextData(textData + `${tcgString}\n`);
+    const newTextData = {
+      ...textData,
+      [variant]: textData[variant] + `${tcgString}\n`,
+    };
+    setTextData(newTextData);
   };
 
   const copyOptions = useMemo(() => [{ label: "Copy" }], []);
 
   const handleCopy = useCallback(
-    async (label: string) => {
+    async (label: string, variant: string) => {
       try {
-        console.log("adding to clipboard...", textData);
-        await navigator.clipboard.writeText(textData);
+        console.log("adding to clipboard...", textData[variant]);
+        await navigator.clipboard.writeText(textData[variant]);
         setCopiedLabel(label);
         setTimeout(() => setCopiedLabel(""), 1500);
       } catch (error) {
@@ -84,48 +92,59 @@ export default function Home() {
           )}
         </section>
 
-        <section className="mt-10 flex flex-1 flex-col rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0">
-          <div className="mb-4 flex flex-wrap items-center gap-3">
-            {copyOptions.map(({ label }) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => handleCopy(label)}
-                className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-              >
-                {label}
-              </button>
-            ))}
-            <a
-              key="tcg-player"
-              href={`https://www.tcgplayer.com/massentry?c=${textData
-                .split("\n")
-                .join("||")}&productLine=Pokemon`}
-              className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+        {Object.entries(textData).map(([variant, text]) => {
+          return (
+            <div
+              key={variant}
+              className="mt-10 flex flex-1 flex-row rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0"
             >
-              Open TCGPlayer
-            </a>
-          </div>
-          <div className="flex-1 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-            <label
-              htmlFor="decklist-output"
-              className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
-            >
-              Generated Output
-            </label>
-            <textarea
-              id="decklist-output"
-              value={textData}
-              readOnly
-              className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
-            />
-          </div>
-          {copiedLabel && (
-            <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
-              {copiedLabel} copied to clipboard!
-            </p>
-          )}
-        </section>
+              <section className="mt-10 flex flex-1 flex-col rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none lg:mt-0">
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  {copyOptions.map(({ label }) => (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => handleCopy(label, variant)}
+                      className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <a
+                    key="tcg-player"
+                    href={`https://www.tcgplayer.com/massentry?c=${textData[
+                      variant
+                    ]
+                      .split("\n")
+                      .join("||")}&productLine=Pokemon`}
+                    className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                  >
+                    Open TCGPlayer
+                  </a>
+                </div>
+                <div className="flex-1 rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                  <label
+                    htmlFor="decklist-output"
+                    className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
+                  >
+                    Generated Output
+                  </label>
+                  <textarea
+                    id="decklist-output"
+                    value={textData[variant]}
+                    readOnly
+                    className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
+                  />
+                </div>
+                {copiedLabel && (
+                  <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
+                    {copiedLabel} copied to clipboard!
+                  </p>
+                )}
+              </section>
+            </div>
+          );
+        })}
       </main>
     </div>
   );

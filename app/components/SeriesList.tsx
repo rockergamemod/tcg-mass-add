@@ -1,9 +1,11 @@
 import { Suspense, useEffect, useState } from "react";
 import tcgdex from "../utils/tcgdex";
 import SetListCard from "./SetListCard";
+import { SerieResume } from "@tcgdex/sdk";
+import SeriesListCard from "./SeriesListCard";
 
 type SeriesListProps = {
-  onSelect: (id: string) => void;
+  onSelect: (series: SerieResume) => void;
 };
 type FetchSetsFunctionType = typeof tcgdex.fetchSeries;
 type FetchSetReturnType = NonNullable<
@@ -26,7 +28,7 @@ export default function SeriesList({ onSelect }: SeriesListProps) {
   return (
     <Suspense fallback={null}>
       {setData.map((set) => (
-        <SetListCard key={set.id} set={set} onSelect={onSelect} />
+        <SeriesListCard key={set.id} set={set} onSelect={onSelect} />
       ))}
     </Suspense>
   );
