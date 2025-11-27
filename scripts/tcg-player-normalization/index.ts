@@ -2,6 +2,10 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 import ndjson from "ndjson";
+import TCGdex, { SerieList } from "@tcgdex/sdk";
+
+// Instantiate the SDK
+const tcgdex = new TCGdex("en");
 
 export interface RawTCGPlayerCardData {
   "TCGplayer Id": string;
@@ -40,6 +44,8 @@ export interface RawSetData {
 
 export interface OutputSeriesData {
   name: string;
+  logo?: string;
+  rawTcgDexSeriesData: SerieList[number];
 }
 
 export type Printing =
@@ -147,15 +153,17 @@ const extractSetNames = (rawTCGData: RawTCGPlayerCardData[]): string[] => {
 //   );
 // };
 
-const writeSeriesData = (outputFolder: string, seriesList: string[]): void => {
+const writeSeriesData = (
+  outputFolder: string,
+  seriesList: OutputSeriesData[]
+): void => {
   const outputFile = path.join(outputFolder, "series.json");
-  const data = seriesList.map((n) => ({ name: n }));
-  fs.writeFileSync(outputFile, JSON.stringify(data));
+  fs.writeFileSync(outputFile, JSON.stringify(seriesList, null, 2));
 };
 
 const writeSetData = (outputFolder: string, setData: RawSetData[]): void => {
   const outputFile = path.join(outputFolder, "sets.json");
-  fs.writeFileSync(outputFile, JSON.stringify(setData));
+  fs.writeFileSync(outputFile, JSON.stringify(setData, null, 2));
 };
 
 const writeCardData = (outputFolder: string, cardData: CardData[]): void => {
@@ -304,6 +312,37 @@ const processCards = (
   return validCards;
 };
 
+const processSeries = (
+  listFromCards: string[],
+  tcgDexSeries: SerieList | undefined
+): OutputSeriesData[] => {
+  console.log(
+    "dexnames",
+    tcgDexSeries?.map((t) => t.name)
+  );
+  console.log("seriesNames", listFromCards);
+  if (!tcgDexSeries) {
+    throw new Error("Empty tcgDex data");
+  }
+  return listFromCards
+    .filter((seriesName: string) => {
+      const foundSeries = tcgDexSeries.find(
+        (s) => s.name.toLowerCase() === seriesName.toLowerCase()
+      );
+      return foundSeries !== undefined;
+    })
+    .map<OutputSeriesData>((seriesName): OutputSeriesData => {
+      const foundSeries = tcgDexSeries.find(
+        (s) => s.name.toLowerCase() === seriesName.toLowerCase()
+      );
+      return {
+        name: seriesName,
+        logo: foundSeries!.logo + ".png",
+        rawTcgDexSeriesData: foundSeries!,
+      };
+    });
+};
+
 /**
  * argv[2] = Path to tcgplayer_card_data.csv (the raw output from TCGPlayer's Pricing export)
  * argv[3] = Path to sets.json data from https://github.com/PokemonTCG/pokemon-tcg-data/blob/master/sets/en.json
@@ -333,14 +372,16 @@ async function doConvert() {
   const setData = await readJsonFile<RawSetData>(setDataPath);
 
   // Process Series
+  const allSeries = await tcgdex.fetch("series");
   const seriesList = uniqueBy(setData, "series");
+  const processedSeries = processSeries(seriesList, allSeries);
 
   // Process Cards
   const outputCardData = processCards(tcgPlayerCardData, setData);
 
   // Write everything out
   const outputFolder = path.join(process.cwd(), process.argv[4]);
-  writeSeriesData(outputFolder, seriesList);
+  writeSeriesData(outputFolder, processedSeries);
   writeSetData(outputFolder, setData);
   writeCardData(outputFolder, outputCardData);
 }
