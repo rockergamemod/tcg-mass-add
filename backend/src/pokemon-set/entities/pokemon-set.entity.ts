@@ -10,14 +10,21 @@ import {
 import { PokemonCard } from 'src/pokemon-card/entities/pokemon-card.entity';
 import { PokemonSeries } from 'src/pokemon-series/entities/pokemon-series.entity';
 
+export const POKEMON_SETS_TABLE_NAME = 'pokemon_sets';
+
 @Table({
-  tableName: 'pokemon_sets',
+  tableName: POKEMON_SETS_TABLE_NAME,
 })
 export class PokemonSet extends Model {
   @Column({
     type: DataType.TEXT,
   })
   declare name: string;
+
+  @Column({
+    type: DataType.TEXT,
+  })
+  declare setId: string;
 
   @Column({
     type: DataType.INTEGER,

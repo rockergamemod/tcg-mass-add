@@ -1,0 +1,12 @@
+// .sequelizerc
+const path = require('path');
+require('ts-node/register'); // Add this to work with TypeScript
+
+module.exports = {
+    // sequelize-cli config (NOT the Nest one)
+    config: path.resolve('dist', 'database', 'sequelize-cli.config.js'),
+    'migrations-path': path.resolve('dist', 'database', 'migrations'),
+    'seeders-path': path.resolve('dist', 'database', 'seeders'),
+    // models-path is optional if you only use queryInterface in migrations
+  };
+  

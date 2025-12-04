@@ -8,7 +8,13 @@ import {
 } from 'sequelize-typescript';
 import { PokemonSet } from 'src/pokemon-set/entities/pokemon-set.entity';
 
-export const Printing = ['normal', 'holo', 'reverse'] as const;
+export const Printing = [
+  'normal',
+  'holo',
+  'reverse',
+  '1st edition holo',
+  '1st edition',
+] as const;
 export type PrintingType = (typeof Printing)[number];
 export const Rarity = [
   'Promo',
@@ -38,9 +44,9 @@ export const Rarity = [
   'Rare BREAK',
 ] as const;
 export type RarityType = (typeof Rarity)[number];
-
+export const POKEMON_CARDS_TABLE_NAME = 'pokemon_cards';
 @Table({
-  tableName: 'pokemon_cards',
+  tableName: POKEMON_CARDS_TABLE_NAME,
 })
 export class PokemonCard extends Model {
   @Column({
