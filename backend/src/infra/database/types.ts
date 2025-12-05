@@ -19,9 +19,9 @@ export enum CardSourceType {
 }
 
 export enum CardFinishType {
-  NonHolo = 'non_holo',
-  Holo = 'holo',
-  ReverseHolo = 'reverse_holo',
+  Normal = 'normal',
+  Holo = 'holofoil',
+  ReverseHolo = 'reverse-holo',
   // Extend as needed
 }
 

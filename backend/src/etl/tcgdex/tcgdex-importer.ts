@@ -5,16 +5,25 @@ import { EntityManager } from '@mikro-orm/core';
 import TCGdex from '@tcgdex/sdk';
 
 import mikroOrmConfig from 'src/mikro-orm.config';
-import { TcgGame, TcgSet } from 'src/infra/database';
+import {
+  TcgCard,
+  TcgCardPrinting,
+  TcgCardSource,
+  TcgGame,
+  TcgSet,
+} from 'src/infra/database';
 import { TcgSeries } from 'src/infra/database/tcg-series.entity';
-import { TcgSetType } from 'src/infra/database/types';
+import {
+  CardFinishType,
+  CardSourceType,
+  TcgSetType,
+} from 'src/infra/database/types';
+import { TcgSetSource } from 'src/infra/database/tcg-set-source.entity';
 
 export async function loadTcgDexSeries(
   em: EntityManager,
+  tcgdex: TCGdex,
 ): Promise<TcgSeries[]> {
-  // Instantiate the SDK
-  const tcgdex = new TCGdex('en');
-
   const pokemonTcgGame = await em.findOne(TcgGame, { name: 'Pokemon' });
   if (!pokemonTcgGame) {
     throw new Error('Pokemon TCG Game not found, ensure DB was seeded');
@@ -46,17 +55,9 @@ export async function loadTcgDexSeries(
 
 export async function loadTcgDexSetsForSeries(
   em: EntityManager,
-  seriesName: string,
+  tcgdex: TCGdex,
+  series: TcgSeries,
 ) {
-  // Instantiate the SDK
-  const tcgdex = new TCGdex('en');
-
-  // Fetch the series to get/add sets to
-  const tcgSeries = await em.findOne(TcgSeries, { name: seriesName });
-  if (!tcgSeries) {
-    throw new Error('TcgSeries not found, ensure they have been loaded first');
-  }
-
   // Fetch the TcgGame these sets are for
   const pokemonTcgGame = await em.findOne(TcgGame, { name: 'Pokemon' });
   if (!pokemonTcgGame) {
@@ -64,9 +65,9 @@ export async function loadTcgDexSetsForSeries(
   }
 
   // Fetch the sets for the series from TCGDex
-  const sets = await tcgdex.fetchSets(seriesName);
+  const sets = await tcgdex.fetchSets(series.name);
   if (sets === undefined) {
-    return;
+    return [];
   }
   const tcgSets: TcgSet[] = [];
   for (const set of sets) {
@@ -77,8 +78,10 @@ export async function loadTcgDexSetsForSeries(
     }
     const mappedSet = em.create(TcgSet, {
       game: pokemonTcgGame,
-      code: fetchedSet['abbreviation'].official,
-      series: tcgSeries,
+      code: fetchedSet['abbreviation']
+        ? fetchedSet['abbreviation'].official
+        : undefined,
+      series: series,
       name: set.name,
       releaseDate: fetchedSet.releaseDate,
       isUserVisible: true,
@@ -86,9 +89,20 @@ export async function loadTcgDexSetsForSeries(
       type: TcgSetType.Main, // TODO: Refine this
     });
 
+    const mappedSourceSet = em.create(TcgSetSource, {
+      set: mappedSet,
+      source: CardSourceType.Tcgdex,
+      sourceSetId: fetchedSet.id,
+      sourceSetCode: mappedSet.code,
+      sourceSetName: fetchedSet.name,
+      rawExtra: { data: fetchedSet },
+      isPrimary: true,
+    });
+
     tcgSets.push(mappedSet);
 
     em.persist(mappedSet);
+    em.persist(mappedSourceSet);
   }
 
   await em.flush();
@@ -96,15 +110,93 @@ export async function loadTcgDexSetsForSeries(
   return tcgSets;
 }
 
+export async function loadTcgDexCardsForSet(
+  em: EntityManager,
+  tcgdex: TCGdex,
+  set: TcgSet,
+) {
+  const source = await em.findOneOrFail(TcgSetSource, {
+    source: CardSourceType.Tcgdex,
+    sourceSetName: set.name,
+  });
+  const dexSet = await tcgdex.fetch('sets', source.sourceSetId);
+  if (!dexSet) {
+    throw new Error(`Unable to find cards for set ${set.name}`);
+  }
+  const dexCards = dexSet.cards;
+  const result: TcgCard[] = [];
+
+  for (const dexCard of dexCards) {
+    const dexCardFull = await tcgdex.fetch('cards', dexCard.id);
+    if (!dexCardFull) {
+      continue;
+    }
+
+    const mappedCard = em.create(TcgCard, {
+      set: set,
+      collectorNumber: dexCardFull.localId,
+      canonicalName: dexCardFull.name,
+      rarity: dexCardFull.rarity,
+      supertype: dexCardFull.category,
+      subtype: dexCardFull.stage,
+      printings: [],
+    });
+
+    const cardPricing = dexCardFull['pricing']['tcgplayer'];
+
+    const printings = cardPricing
+      ? Object.keys(cardPricing)
+          .filter((k): k is CardFinishType =>
+            Object.values(CardFinishType).includes(k as any),
+          )
+          .map((finish) =>
+            em.create(TcgCardPrinting, {
+              card: mappedCard,
+              finishType: finish,
+              isDefault: false,
+            }),
+          )
+      : [];
+
+    const cardSource = em.create(TcgCardSource, {
+      card: mappedCard,
+      source: CardSourceType.Tcgdex,
+      sourceCardId: dexCardFull.id,
+      sourceSetCode: source.sourceSetCode,
+      sourceSetName: source.sourceSetName,
+      sourceName: dexCardFull.name,
+      rawExtra: { data: dexCardFull },
+      isPrimary: true,
+    });
+
+    result.push(mappedCard);
+    em.persist(mappedCard);
+    em.persist(printings);
+    em.persist(cardSource);
+  }
+
+  await em.flush();
+
+  return result;
+}
+
 async function main() {
   const orm = await MikroORM.init(mikroOrmConfig);
   const em = orm.em.fork();
+  // Instantiate the SDK
+  const tcgdex = new TCGdex('en');
 
-  const serieses = await loadTcgDexSeries(em);
+  const serieses = await loadTcgDexSeries(em, tcgdex);
   console.log(`Loaded ${serieses.length} series from tcgdex`);
 
   for (const series of serieses) {
-    await loadTcgDexSetsForSeries(em, series.name);
+    const sets = await loadTcgDexSetsForSeries(em, tcgdex, series);
+    console.log(`Loaded ${sets.length} sets.`);
+
+    for (const set of sets) {
+      const cards = await loadTcgDexCardsForSet(em, tcgdex, set);
+      console.log(`Loaded ${cards.length} cards.`);
+    }
   }
 
   await orm.close();

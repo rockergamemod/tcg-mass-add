@@ -9,7 +9,7 @@ import { CardFinishType, CardArtVariant } from './types';
 
 @Entity({ tableName: 'tcg_card_printings' })
 export class TcgCardPrinting {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'number', autoincrement: true })
   id!: number;
 
   @ManyToOne(() => TcgCard)
@@ -21,6 +21,6 @@ export class TcgCardPrinting {
   @Enum({ items: () => CardArtVariant, nullable: true })
   artVariant?: CardArtVariant; // normal / illustration_rare / alt_art ...
 
-  @Property({ default: true })
+  @Property({ default: true, type: 'bool' })
   isDefault!: boolean; // which printing you treat as the default in your UI
 }

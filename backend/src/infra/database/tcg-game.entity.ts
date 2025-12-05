@@ -16,13 +16,13 @@ import { TcgSet } from './tcg-set.entity';
 
 @Entity({ tableName: 'tcg_games' })
 export class TcgGame {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'serial', autoincrement: true })
   id!: number; // Simple numeric PK; switch to UUID if you prefer
 
   @Enum(() => GameKey)
   key!: GameKey; // e.g. 'pokemon'
 
-  @Property()
+  @Property({ type: 'string' })
   name!: string; // e.g. 'Pokémon TCG'
 
   @OneToMany(() => TcgSet, (set) => set.game)

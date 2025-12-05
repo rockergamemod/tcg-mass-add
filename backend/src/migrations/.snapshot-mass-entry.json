@@ -108,12 +108,13 @@
         },
         "display_order": {
           "name": "display_order",
-          "type": "int",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "is_hidden": {
           "name": "is_hidden",
@@ -194,7 +195,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -219,13 +220,13 @@
         },
         "release_date": {
           "name": "release_date",
-          "type": "timestamptz",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
-          "mappedType": "datetime"
+          "length": 255,
+          "mappedType": "string"
         },
         "is_user_visible": {
           "name": "is_user_visible",
@@ -270,10 +271,11 @@
       "schema": "public",
       "indexes": [
         {
-          "keyName": "tcg_sets_game_id_code_unique",
+          "keyName": "tcg_sets_game_id_code_series_id_unique",
           "columnNames": [
             "game_id",
-            "code"
+            "code",
+            "series_id"
           ],
           "composite": true,
           "constraint": true,
@@ -661,23 +663,24 @@
         },
         "is_active": {
           "name": "is_active",
-          "type": "boolean",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "length": 255,
           "default": "true",
-          "mappedType": "boolean"
+          "mappedType": "string"
         },
         "last_seen_at": {
           "name": "last_seen_at",
-          "type": "timestamptz",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
-          "mappedType": "datetime"
+          "length": 255,
+          "mappedType": "string"
         }
       },
       "name": "tcgplayer_products",
@@ -759,9 +762,9 @@
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "non_holo",
-            "holo",
-            "reverse_holo"
+            "normal",
+            "holofoil",
+            "reverse-holo"
           ],
           "mappedType": "enum"
         },

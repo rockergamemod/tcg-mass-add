@@ -8,7 +8,7 @@ export class TcgGamesSeeder extends Seeder {
     // TODO: Add all supported games (later)
     const pokemon = em.create(TcgGame, {
       key: GameKey.Pokemon,
-      name: 'Pokémon TCG',
+      name: 'Pokemon',
     });
 
     em.persist(pokemon);

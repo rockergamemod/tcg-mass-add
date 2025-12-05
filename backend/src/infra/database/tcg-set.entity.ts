@@ -19,30 +19,30 @@ import { TcgSeries } from './tcg-series.entity';
 import { TcgSetType } from './types';
 
 @Entity({ tableName: 'tcg_sets' })
-@Unique({ properties: ['game', 'code'] })
+@Unique({ properties: ['game', 'code', 'series'] })
 export class TcgSet {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'serial', autoincrement: true })
   id!: number;
 
   @ManyToOne(() => TcgGame)
   game!: TcgGame;
 
-  @Property()
-  code!: string; // Your canonical code, e.g. 'sv3', 'OBF'
+  @Property({ type: 'string', nullable: true })
+  code!: string | undefined; // Your canonical code, e.g. 'sv3', 'OBF'
 
   @ManyToOne(() => TcgSeries, { nullable: true })
   series?: TcgSeries; // null for edge cases / TCGplayer-only sets
 
-  @Property()
+  @Property({ type: 'string' })
   name!: string; // 'Obsidian Flames'
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   releaseDate?: Date;
 
-  @Property({ default: true })
+  @Property({ type: 'bool', default: true })
   isUserVisible!: boolean;
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   logo!: string | undefined;
 
   @Enum(() => TcgSetType)

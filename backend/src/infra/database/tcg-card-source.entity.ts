@@ -20,7 +20,7 @@ import { CardSourceType } from './types';
 @Entity({ tableName: 'tcg_card_sources' })
 @Unique({ properties: ['source', 'sourceCardId'] })
 export class TcgCardSource {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'serial', autoincrement: true })
   id!: number;
 
   @ManyToOne(() => TcgCard)
@@ -29,22 +29,22 @@ export class TcgCardSource {
   @Enum(() => CardSourceType)
   source!: CardSourceType; // tcgplayer / tcgdex / pokemon_tcg_data ...
 
-  @Property()
+  @Property({ type: 'string' })
   sourceCardId!: string; // e.g. TCGplayer productId, tcgdex id, etc.
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   sourceSetCode?: string; // provider-specific set code
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   sourceSetName?: string; // provider-specific set name
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   sourceName?: string; // provider-specific card name
 
   @Property({ type: 'json', nullable: true })
   rawExtra?: Record<string, any>; // provider-specific JSON blob (raw fields)
 
-  @Property({ default: false })
+  @Property({ type: 'bool', default: false })
   isPrimary!: boolean; // your chosen primary mapping for that source
 
   @OneToOne(() => TcgplayerProduct, (product) => product.cardSource, {

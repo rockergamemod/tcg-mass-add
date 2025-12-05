@@ -14,25 +14,25 @@ import { TcgSet } from './tcg-set.entity';
 @Entity({ tableName: 'tcg_cards' })
 @Unique({ properties: ['set', 'collectorNumber'] })
 export class TcgCard {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'serial', autoincrement: true })
   id!: number;
 
   @ManyToOne(() => TcgSet)
   set!: TcgSet;
 
-  @Property()
+  @Property({ type: 'string' })
   collectorNumber!: string; // e.g. '060', '198/197'
 
-  @Property()
+  @Property({ type: 'string' })
   canonicalName!: string; // Your normalized display name, e.g. 'Gloom'
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   rarity?: string;
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   supertype?: string; // e.g. 'Pokémon'
 
-  @Property({ nullable: true })
+  @Property({ type: 'string', nullable: true })
   subtype?: string; // e.g. 'Stage 1'
 
   @OneToMany(() => TcgCardPrinting, (printing) => printing.card)
