@@ -7,6 +7,8 @@ import SeriesList from "./components/SeriesList";
 import CardList from "./components/CardList";
 import { CardResume, Query, SerieResume, SetResume } from "@tcgdex/sdk";
 import { createLine, setNameToPrintedTotal } from "./utils/tcgplayer";
+import React from "react";
+import { cardsApi } from "./utils/api";
 
 export default function Home() {
   const [copiedLabel, setCopiedLabel] = useState("");
@@ -30,27 +32,18 @@ export default function Home() {
   const [cards, setCards] = useState<CardResume[]>([]);
   useEffect(() => {
     if (!selectedSet) return;
-    tcgdex.card
-      .list(Query.create().equal("set", selectedSet.id))
+    cardsApi
+      .getAllForSet(+selectedSeries!.id, +selectedSet.id)
       .then((queriedCards) => {
-        Promise.all(queriedCards.map((c) => c.getCard())).then(
-          (mappedCards) => {
-            const rarities = mappedCards.reduce<string[]>((acc, c) => {
-              if (acc.includes(c.rarity)) {
-                return acc;
-              }
-              acc.push(c.rarity);
-              return acc;
-            }, []);
-            console.log("rarities", rarities);
-            setCards(mappedCards);
-          }
+        const sortedCards = queriedCards.sort(
+          (a, b) => +a.collectorNumber > +b.collectorNumber
         );
+        setCards(sortedCards);
       });
   }, [selectedSeries, selectedSet]);
 
   console.log("selectedCards", selectedCards);
-  const onAddCard = (card: CardResume, variant: string) => {
+  const onAddCard = (card: CardResume, printing: { finishType }) => {
     const cardData = {
       ...selectedCards,
       [variant]: [...selectedCards[variant], card],

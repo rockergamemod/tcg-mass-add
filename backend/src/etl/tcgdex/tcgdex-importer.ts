@@ -35,12 +35,25 @@ export async function loadTcgDexSeries(
   }
   const tcgSeries: TcgSeries[] = [];
   for (const serie of series) {
+    const existingSeries = await em.findOne(TcgSeries, {
+      game: pokemonTcgGame,
+      name: serie.name,
+    });
+    const detailedSeries = await tcgdex.fetchSerie(serie.id);
+
+    if (existingSeries && detailedSeries) {
+      existingSeries.releaseDate = (detailedSeries as any).releaseDate;
+      em.persist(existingSeries);
+      continue;
+    }
+
     const mappedSeries = em.create(TcgSeries, {
       game: pokemonTcgGame,
       name: serie.name,
       logo: serie.logo ? `${serie.logo}.png` : undefined,
       code: serie.id,
       isHidden: false,
+      releaseDate: (detailedSeries as any).releaseDate,
     });
 
     tcgSeries.push(mappedSeries);
@@ -140,6 +153,7 @@ export async function loadTcgDexCardsForSet(
       supertype: dexCardFull.category,
       subtype: dexCardFull.stage,
       printings: [],
+      image: dexCardFull.image + '.png',
     });
 
     const cardPricing = dexCardFull['pricing']['tcgplayer'];
@@ -181,6 +195,7 @@ export async function loadTcgDexCardsForSet(
 }
 
 async function main() {
+  const shouldSkipSets = process.env['SHOULD_SKIP_SETS'] === 'true';
   const orm = await MikroORM.init(mikroOrmConfig);
   const em = orm.em.fork();
   // Instantiate the SDK
@@ -188,6 +203,11 @@ async function main() {
 
   const serieses = await loadTcgDexSeries(em, tcgdex);
   console.log(`Loaded ${serieses.length} series from tcgdex`);
+
+  if (shouldSkipSets) {
+    await orm.close();
+    return;
+  }
 
   for (const series of serieses) {
     const sets = await loadTcgDexSetsForSeries(em, tcgdex, series);
@@ -198,12 +218,14 @@ async function main() {
       console.log(`Loaded ${cards.length} cards.`);
     }
   }
-
   await orm.close();
-  console.log('Import completed');
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })
+  .then(() => {
+    console.log('Import completed');
+  });

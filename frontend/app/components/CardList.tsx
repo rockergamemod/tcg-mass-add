@@ -7,6 +7,7 @@ import {
 } from "@tcgdex/sdk";
 import { useEffect, useState } from "react";
 import tcgdex from "../utils/tcgdex";
+import React from "react";
 
 type VariantKey = keyof NonNullable<Card["variants"]>;
 
@@ -15,6 +16,27 @@ const VARIANT_LABELS: Record<VariantKey, string> = {
   reverse: "Reverse",
   holo: "Holo",
   firstEdition: "1st Edition",
+};
+
+export enum CardFinishType {
+  Normal = "normal",
+  Holo = "holofoil",
+  ReverseHolo = "reverse-holo",
+  Unlimited = "unlimited",
+  UnlimitedHolo = "unlimited-holo",
+  FirstEdition = "1st-edition",
+  FirstEditionHolo = "1st-edition-holo",
+  // Extend as needed
+}
+
+const FINISH_LABELS: Record<CardFinishType, string> = {
+  [CardFinishType.Normal]: "Normal",
+  [CardFinishType.Holo]: "Holo",
+  [CardFinishType.ReverseHolo]: "Reverse Holo",
+  [CardFinishType.Unlimited]: "Unlimited",
+  [CardFinishType.UnlimitedHolo]: "Unlimited Holo",
+  [CardFinishType.FirstEdition]: "1st Edition",
+  [CardFinishType.FirstEditionHolo]: "1st Edition Holo",
 };
 
 type CardListProps = {
@@ -75,11 +97,17 @@ export default function CardList({
       </div>
       <div className="flex flex-col gap-4">
         {cards.map((card) => {
-          const { id, image, name, set, rarity, category, variants, localId } =
-            card as any;
-          const activeVariants = Object.entries(variants).filter(
-            ([name, has]) => has
-          );
+          const {
+            id,
+            image,
+            canonicalName,
+            collectorNumber,
+            set,
+            rarity,
+            category,
+            printings,
+            localId,
+          } = card as any;
 
           return (
             <article
@@ -90,8 +118,8 @@ export default function CardList({
                 {image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={`${image}/high.webp`}
-                    alt={name}
+                    src={`${image}`}
+                    alt={canonicalName}
                     className="h-full w-full object-cover"
                     draggable={false}
                     loading="lazy"
@@ -110,7 +138,7 @@ export default function CardList({
                       {set.name}
                     </p>
                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                      {name}
+                      {canonicalName}
                       {localId ? (
                         <span className="ml-2 text-sm font-medium text-zinc-400">
                           #{localId}
@@ -121,26 +149,24 @@ export default function CardList({
                       {category}
                     </p>
                   </div>
+                  <span className="rounded-full border border-green-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+                    {collectorNumber}
+                  </span>
                   <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
                     {rarity || "Unknown Rarity"}
                   </span>
                 </header>
 
                 <div className="flex flex-wrap gap-2">
-                  {rarity ? (
-                    rarityVariantMap[rarity].map((variantKey) => (
+                  {printings.length > 0 ? (
+                    printings.map((printing) => (
                       <button
-                        key={variantKey}
+                        key={printing.finishType}
                         type="button"
-                        onClick={() => onAddVariant?.(card, variantKey)}
+                        onClick={() => onAddVariant?.(card, printing)}
                         className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                       >
-                        Add{" "}
-                        {
-                          VARIANT_LABELS[
-                            variantKey as keyof typeof VARIANT_LABELS
-                          ]
-                        }
+                        Add {FINISH_LABELS[printing.finishType]}
                       </button>
                     ))
                   ) : (

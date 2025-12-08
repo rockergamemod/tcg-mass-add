@@ -5,7 +5,7 @@ import {
   DATABASE_DEFAULT_USERNAME,
   DATABASE_DEFAULT_PASSWORD,
   DATABASE_DEFAULT_NAME,
-} from './sequelize-database/constants';
+} from './infra/database/constants';
 import {
   TcgGame,
   TcgCard,

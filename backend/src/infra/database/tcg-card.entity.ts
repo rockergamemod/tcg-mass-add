@@ -33,7 +33,10 @@ export class TcgCard {
   supertype?: string; // e.g. 'Pokémon'
 
   @Property({ type: 'string', nullable: true })
-  subtype?: string; // e.g. 'Stage 1'
+  subtype?: string; // e.g. 'Stage 1'\
+
+  @Property({ type: 'string', nullable: true })
+  image?: string;
 
   @OneToMany(() => TcgCardPrinting, (printing) => printing.card)
   printings = new Collection<TcgCardPrinting>(this);

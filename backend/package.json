@@ -14,6 +14,7 @@
     "db:migrate": "sequelize-cli db:migrate",
     "db:seed": "sequelize-cli db:seed:all",
     "etl:load:tcgdex": "tsx src/etl/tcgdex/tcgdex-importer.ts",
+    "etl:load:tcgdex:images": "tsx src/etl/tcgdex/tcgdex-image-population.ts",
     "etl:load:tcgplayer": "tsx src/etl/tcgplayer/tcgplayer-importer.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

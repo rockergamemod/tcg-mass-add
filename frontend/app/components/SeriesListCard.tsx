@@ -1,4 +1,5 @@
 import { SerieResume, SetResume } from "@tcgdex/sdk";
+import React from "react";
 
 type SetListCardProps = {
   set: SerieResume;
@@ -12,6 +13,7 @@ export default function SeriesListCard({
   isActive = false,
 }: SetListCardProps) {
   const { id, name, logo } = set;
+  const logoUrl = logo?.endsWith(".png") ? logo : `${logo}.png`;
 
   return (
     <button
@@ -27,7 +29,7 @@ export default function SeriesListCard({
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={`${logo}.png`}
+            src={logoUrl}
             alt={`${name} logo`}
             className="h-full w-full object-contain"
             draggable={false}

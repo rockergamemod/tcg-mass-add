@@ -37,6 +37,9 @@ export class TcgSeries {
   @Property({ type: 'bool', default: false })
   isHidden!: boolean;
 
+  @Property({ type: 'string', nullable: true })
+  releaseDate!: string;
+
   @OneToMany(() => TcgSet, (set) => set.series)
   sets = new Collection<TcgSet>(this);
 }

@@ -22,6 +22,10 @@ export enum CardFinishType {
   Normal = 'normal',
   Holo = 'holofoil',
   ReverseHolo = 'reverse-holo',
+  Unlimited = 'unlimited',
+  UnlimitedHolo = 'unlimited-holo',
+  FirstEdition = '1st-edition',
+  FirstEditionHolo = '1st-edition-holo',
   // Extend as needed
 }
 
