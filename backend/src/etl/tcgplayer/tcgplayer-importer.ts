@@ -1,6 +1,7 @@
 import { EntityManager, MikroORM } from '@mikro-orm/postgresql';
 import { parseTcgplayerCsv, TcgplayerCsvRow } from './tcgplayer-csv-parser';
 import {
+  CardArtVariant,
   CardFinishType,
   CardSourceType,
   GameKey,
@@ -10,7 +11,6 @@ import {
   TcgCardPrinting,
   TcgCardSource,
   TcgGame,
-  TcgplayerProduct,
   TcgSet,
 } from 'src/infra/database';
 import mikroOrmConfig from 'src/mikro-orm.config';
@@ -169,6 +169,56 @@ export function removeLeadingZeroes(numericString: string): string {
   return trimmed === '' ? '0' : trimmed;
 }
 
+export function extractArtVariantFromRow(
+  row: TcgplayerCsvRow,
+  cardFinish: CardFinishType | undefined,
+): CardArtVariant {
+  if (cardFinish === undefined) {
+    return CardArtVariant.Normal;
+  }
+  if (
+    [
+      CardFinishType.FirstEdition,
+      CardFinishType.Unlimited,
+      CardFinishType.FirstEditionHolo,
+      CardFinishType.UnlimitedHolo,
+    ].includes(cardFinish)
+  ) {
+    return CardArtVariant.Normal;
+  }
+
+  // Rarity-based variants
+  if (row.rarity === 'Illustration Rare') {
+    return CardArtVariant.IllustrationRare;
+  }
+  if (row.rarity === 'Special Illustration Rare') {
+    return CardArtVariant.SpecialIllustrationRare;
+  }
+
+  // Name-based variants
+  if (row.productName.endsWith('(Alternate Full Art)')) {
+    return CardArtVariant.AltFullArt;
+  }
+  if (row.productName.endsWith('(Full Art)')) {
+    return CardArtVariant.AltArt;
+  }
+  if (row.productName.endsWith('(Alternate Art Secret)')) {
+    return CardArtVariant.AltArtSecret;
+  }
+  if (row.productName.endsWith('(Secret)')) {
+    return CardArtVariant.Secret;
+  }
+
+  if (row.productName.endsWith('(Poke Ball Pattern)')) {
+    return CardArtVariant.PokeBall;
+  }
+  if (row.productName.endsWith('(Master Ball Pattern)')) {
+    return CardArtVariant.MasterBall;
+  }
+
+  return CardArtVariant.Normal;
+}
+
 async function findSetByTcgPlayerSetName(
   em: EntityManager,
   game: TcgGame,
@@ -261,8 +311,6 @@ export async function importTcgplayerCsvRows(
 
   const setCache: Map<string, TcgSet> = new Map();
 
-  const allProducts = await em.findAll(TcgplayerProduct);
-  console.log(`Fetched ${allProducts.length} TCGPlayer Products`);
   const allCards = await em.findAll(TcgCard, { populate: ['printings'] });
   console.log(`Fetched ${allCards.length} Cards`);
   const allSources = await em.findAll(TcgCardSource, {
@@ -280,6 +328,10 @@ export async function importTcgplayerCsvRows(
     }
     if (row.productLine !== 'Pokemon') continue;
     if (row.productName.startsWith('Code Card - ')) continue;
+
+    // TODO: Remove this.
+    // if (row.productName !== 'Sewaddle') continue;
+    // if (row.setName !== 'SV: White Flare') continue;
 
     // REMOVE THIS
     // if (row.productName !== 'Nidoking - 034/165') continue;
@@ -357,6 +409,10 @@ export async function importTcgplayerCsvRows(
       // card.printings.add(printing);
       // em.persist(printing);
 
+      // TODO: Art Variant needs to be populated for pokeball vs masterball, etc.
+
+      const artVariant = extractArtVariantFromRow(row, cardFinish);
+
       const existingCardPrinting = card.printings.find(
         (p) =>
           p.finishType !== undefined &&
@@ -366,12 +422,16 @@ export async function importTcgplayerCsvRows(
       if (!existingCardPrinting) {
         const printing = em.create(TcgCardPrinting, {
           card,
+          artVariant,
           finishType: cardFinish,
           isDefault: false,
         });
         card.printings.add(printing);
         em.persist(printing);
       } else {
+        existingCardPrinting.artVariant = artVariant;
+        em.persist(existingCardPrinting);
+        // Printing might be a Pokeball / Masterball pattern. Check for that and attempt to create it.
         // console.log(
         //   'existingCardPrinting found' +
         //     existingCardPrinting.card.canonicalName,
@@ -381,25 +441,6 @@ export async function importTcgplayerCsvRows(
       }
     } else {
       console.log(`Unable to parse card finish: "${row.condition}"`);
-    }
-
-    let product = allProducts.find(
-      (p) => p.tcgplayerProductId === Number(row.tcgplayerProductId),
-    );
-
-    if (!product) {
-      product = em.create(TcgplayerProduct, {
-        tcgplayerProductId: Number(row.tcgplayerProductId),
-        cardSource: source,
-        productLine: row.productLine,
-        productName: row.productName,
-        setName: row.setName,
-        collectorNumber: row.number,
-        isActive: true,
-        setCode: 'UNKNOWN',
-        lastSeenAt: new Date(),
-      });
-      em.persist(product);
     }
 
     if (counter % 1000 === 0) {

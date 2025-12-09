@@ -14,7 +14,6 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { TcgCard } from './tcg-card.entity';
-import { TcgplayerProduct } from './tcgplayer-product.entity';
 import { CardSourceType } from './types';
 
 @Entity({ tableName: 'tcg_card_sources' })
@@ -46,9 +45,4 @@ export class TcgCardSource {
 
   @Property({ type: 'bool', default: false })
   isPrimary!: boolean; // your chosen primary mapping for that source
-
-  @OneToOne(() => TcgplayerProduct, (product) => product.cardSource, {
-    nullable: true,
-  })
-  tcgplayerProduct?: TcgplayerProduct;
 }

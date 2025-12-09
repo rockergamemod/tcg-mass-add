@@ -31,8 +31,14 @@ export enum CardFinishType {
 
 export enum CardArtVariant {
   Normal = 'normal',
-  IllustrationRare = 'illustration_rare',
-  AltArt = 'alt_art',
+  IllustrationRare = 'illustration-rare',
+  SpecialIllustrationRare = 'special-illustration-rare',
+  AltArt = 'alt-art',
+  AltFullArt = 'alt-full-art',
+  AltArtSecret = 'alt-art-secret',
+  PokeBall = 'poke-ball',
+  MasterBall = 'master-ball',
+  Secret = 'secret',
   // Extend as needed
 }
 

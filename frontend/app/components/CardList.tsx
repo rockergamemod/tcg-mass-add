@@ -39,6 +39,41 @@ const FINISH_LABELS: Record<CardFinishType, string> = {
   [CardFinishType.FirstEditionHolo]: "1st Edition Holo",
 };
 
+export enum CardArtVariant {
+  Normal = "normal",
+  IllustrationRare = "illustration-rare",
+  SpecialIllustrationRare = "special-illustration-rare",
+  AltArt = "alt-art",
+  AltFullArt = "alt-full-art",
+  AltArtSecret = "alt-art-secret",
+  PokeBall = "poke-ball",
+  MasterBall = "master-ball",
+  Secret = "secret",
+  // Extend as needed
+}
+
+const ART_VARIANT_LABEL: Record<CardArtVariant, string> = {
+  [CardArtVariant.Normal]: "",
+  [CardArtVariant.IllustrationRare]: "(IR)",
+  [CardArtVariant.SpecialIllustrationRare]: "(SIR)",
+  [CardArtVariant.AltArt]: "(Alt Art)",
+  [CardArtVariant.AltFullArt]: "(Alt Full Art)",
+  [CardArtVariant.AltArtSecret]: "(Alt Art Secret)",
+  [CardArtVariant.PokeBall]: "(Pokeball)",
+  [CardArtVariant.MasterBall]: "(Masterball)",
+  [CardArtVariant.Secret]: "(Secret)",
+};
+
+const labelForFinishAndArt = (finish: CardFinishType, art: CardArtVariant) => {
+  const finishLabel = FINISH_LABELS[finish];
+  if (art === CardArtVariant.Normal) {
+    return finishLabel;
+  }
+
+  const artLabel = ART_VARIANT_LABEL[art];
+  return `${finishLabel} ${artLabel}`;
+};
+
 type CardListProps = {
   cards: CardResume[];
   selectedSeries: SerieResume;
@@ -166,7 +201,11 @@ export default function CardList({
                         onClick={() => onAddVariant?.(card, printing)}
                         className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                       >
-                        Add {FINISH_LABELS[printing.finishType]}
+                        Add{" "}
+                        {labelForFinishAndArt(
+                          printing.finishType,
+                          printing.artVariant
+                        )}
                       </button>
                     ))
                   ) : (

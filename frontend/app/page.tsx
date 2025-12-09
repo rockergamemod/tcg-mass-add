@@ -23,11 +23,7 @@ export default function Home() {
   const [selectedSet, setSelectedSet] = useState<SetResume | undefined>();
   const [selectedCards, setSelectedCards] = useState<
     Record<string, CardResume[]>
-  >({
-    holo: [],
-    reverse: [],
-    normal: [],
-  });
+  >({});
 
   const [cards, setCards] = useState<CardResume[]>([]);
   useEffect(() => {
@@ -44,28 +40,45 @@ export default function Home() {
 
   console.log("selectedCards", selectedCards);
   const onAddCard = (card: CardResume, printing: { finishType }) => {
+    if (!selectedCards[printing.finishType]) {
+      selectedCards[printing.finishType] = [];
+    }
     const cardData = {
       ...selectedCards,
-      [variant]: [...selectedCards[variant], card],
+      [printing.finishType]: [...selectedCards[printing.finishType], card],
     };
     setSelectedCards(cardData);
 
-    let cardName = card.name;
-    const cardsWithName = cards.filter((c) =>
-      c.name.toLowerCase().includes(card.name.toLowerCase())
-    );
-    const numCardsWithName = cardsWithName.length;
-    if (numCardsWithName !== 1) {
-      console.log("card has multiple listed", card);
-      const printedTotal = setNameToPrintedTotal[selectedSet!.name];
-      cardName = `${card.name} - ${card.localId}/${printedTotal}`;
+    let tcgString = "";
+    const sourceName = (card as any)?.sources[0]?.sourceName;
+    if (sourceName) {
+      tcgString = createLine(sourceName, (card as any).set.code);
     }
 
-    const tcgString = createLine(cardName, selectedSet!.name);
+    // let cardName = card.name;
+    // const cardsWithName = cards.filter((c) =>
+    //   c.name.toLowerCase().includes(card.name.toLowerCase())
+    // );
+    // const numCardsWithName = cardsWithName.length;
+    // if (numCardsWithName !== 1) {
+    //   console.log("card has multiple listed", card);
+    //   const printedTotal = setNameToPrintedTotal[selectedSet!.name];
+    //   cardName = `${card.name} - ${card.localId}/${printedTotal}`;
+    // }
+
+    // const tcgString = createLine(cardName, selectedSet!.name);
     console.log(tcgString);
+    if (!tcgString) {
+      console.log(`Error creating TCG string: "${tcgString}"`);
+      return;
+    }
+    if (!textData[printing.finishType]) {
+      textData[printing.finishType] = "";
+    }
+
     const newTextData = {
       ...textData,
-      [variant]: textData[variant] + `${tcgString}\n`,
+      [printing.finishType]: textData[printing.finishType] + `${tcgString}\n`,
     };
     setTextData(newTextData);
   };
@@ -140,6 +153,7 @@ export default function Home() {
                     aria-disabled
                     href=""
                     className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                    target="_blank"
                   >
                     Open TCGPlayer
                   </a>
@@ -184,6 +198,7 @@ export default function Home() {
                             .split("\n")
                             .join("||")}&productline=Pokemon`}
                           className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                          target="_blank"
                         >
                           Open TCGPlayer
                         </a>

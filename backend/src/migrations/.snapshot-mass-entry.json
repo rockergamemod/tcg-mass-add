@@ -603,168 +603,6 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "tcgplayer_product_id": {
-          "name": "tcgplayer_product_id",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "card_source_id": {
-          "name": "card_source_id",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "product_line": {
-          "name": "product_line",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "product_name": {
-          "name": "product_name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "set_name": {
-          "name": "set_name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "set_code": {
-          "name": "set_code",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "collector_number": {
-          "name": "collector_number",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "rarity": {
-          "name": "rarity",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "length": 255,
-          "mappedType": "string"
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "default": "true",
-          "mappedType": "string"
-        },
-        "last_seen_at": {
-          "name": "last_seen_at",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "length": 255,
-          "mappedType": "string"
-        }
-      },
-      "name": "tcgplayer_products",
-      "schema": "public",
-      "indexes": [
-        {
-          "columnNames": [
-            "card_source_id"
-          ],
-          "composite": false,
-          "keyName": "tcgplayer_products_card_source_id_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "keyName": "tcgplayer_products_tcgplayer_product_id_unique",
-          "columnNames": [
-            "tcgplayer_product_id"
-          ],
-          "composite": false,
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "keyName": "tcgplayer_products_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "constraint": true,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "tcgplayer_products_card_source_id_foreign": {
-          "constraintName": "tcgplayer_products_card_source_id_foreign",
-          "columnNames": [
-            "card_source_id"
-          ],
-          "localTableName": "public.tcgplayer_products",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.tcg_card_sources",
-          "updateRule": "cascade"
-        }
-      },
-      "nativeEnums": {}
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": false,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "card_id": {
           "name": "card_id",
           "type": "int",
@@ -801,8 +639,14 @@
           "nullable": true,
           "enumItems": [
             "normal",
-            "illustration_rare",
-            "alt_art"
+            "illustration-rare",
+            "special-illustration-rare",
+            "alt-art",
+            "alt-full-art",
+            "alt-art-secret",
+            "poke-ball",
+            "master-ball",
+            "secret"
           ],
           "mappedType": "enum"
         },

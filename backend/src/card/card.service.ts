@@ -1,8 +1,8 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { EntityRepository, Populate } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { TcgCard } from 'src/infra/database';
-import { GameKey } from 'src/infra/database/types';
+import { CardSourceType, GameKey } from 'src/infra/database/types';
 
 @Injectable()
 export class CardService {
@@ -23,10 +23,17 @@ export class CardService {
       limit: options.limit,
       offset: options.limit * options.page,
     };
+
     const cards = await this.cardRepo.find(
       { set: { id: setId, game: { key: gameKey }, series: { id: seriesId } } },
       {
-        populate: ['printings', 'set'],
+        fields: ['*', 'printings.*', 'set.*', 'sources.sourceName'],
+        populate: ['printings', 'set', 'sources'],
+        populateWhere: {
+          sources: {
+            source: CardSourceType.Tcgplayer,
+          },
+        },
         orderBy: {
           collectorNumber: 'ASC',
         },

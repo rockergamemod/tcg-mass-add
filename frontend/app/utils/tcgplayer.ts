@@ -18,14 +18,14 @@ export const setNameToPrintedTotal: Record<string, number> = setData.reduce<
 
 export function createLine(
   cardName: string,
-  setName: string,
+  setCode: string,
   cardNumber: number | null = null,
   quantity: number = 1
 ): string {
-  console.log("params", cardName, setName, cardNumber, quantity);
-  const setAbbreviation = setNameToCodeMap[setName];
-  console.log("setAbbreviation", setAbbreviation);
-  let line = `${quantity} ${cardName} [${setAbbreviation}]`;
+  console.log("params", cardName, setCode, cardNumber, quantity);
+  // const setAbbreviation = setNameToCodeMap[setName];
+  // console.log("setAbbreviation", setAbbreviation);
+  let line = `${quantity} ${cardName} [${setCode}]`;
   if (cardNumber) {
     line += ` ${cardNumber}`;
   }

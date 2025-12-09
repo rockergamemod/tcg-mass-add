@@ -47,7 +47,7 @@ export const cardsApi = {
   getAllForSet: async (seriesId: number, setId: number): Promise<any> => {
     const gameKey = "pokemon"; // TODO: For now everything is Pokemon
     return fetchApi<any[]>(
-      `/games/${gameKey}/series/${seriesId}/sets/${setId}/cards`
+      `/games/${gameKey}/series/${seriesId}/sets/${setId}/cards?includes=[sources]`
     );
   },
 };

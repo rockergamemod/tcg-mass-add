@@ -11,7 +11,6 @@ import {
   TcgCard,
   TcgCardPrinting,
   TcgCardSource,
-  TcgplayerProduct,
   TcgSet,
 } from './infra/database';
 import { Migrator } from '@mikro-orm/migrations';
@@ -28,7 +27,6 @@ export default defineConfig({
     TcgSeries,
     TcgSetSource,
     TcgSet,
-    TcgplayerProduct,
   ],
   host: process.env.DB_HOST ?? DATABASE_DEFAULT_HOST,
   port: parseInt(process.env.DB_PORT ?? DATABASE_DEFAULT_PORT.toString()),

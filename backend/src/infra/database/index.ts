@@ -3,5 +3,4 @@ export * from './tcg-card-source.entity';
 export * from './tcg-card.entity';
 export * from './tcg-game.entity';
 export * from './tcg-set.entity';
-export * from './tcgplayer-product.entity';
 export * from './constants';
