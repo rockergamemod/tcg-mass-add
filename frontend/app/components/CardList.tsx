@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import tcgdex from "../utils/tcgdex";
 import React from "react";
+import clsx from "clsx"; // optional but nice
 
 type VariantKey = keyof NonNullable<Card["variants"]>;
 
@@ -62,6 +63,55 @@ const ART_VARIANT_LABEL: Record<CardArtVariant, string> = {
   [CardArtVariant.PokeBall]: "(Pokeball)",
   [CardArtVariant.MasterBall]: "(Masterball)",
   [CardArtVariant.Secret]: "(Secret)",
+};
+
+const RARITY_TO_COLOR: Record<string, string> = {
+  Common: "green",
+  Uncommon: "amber",
+  Rare: "blue",
+  "Double rare": "purple",
+  "Illustration rare": "pink",
+  "Ultra Rare": "gray",
+  "Special illustration rare": "red",
+  "Mega Hyper Rare": "yellow",
+  "Holo Rare V": "purple",
+  "Black White Rare": "white",
+};
+
+// fallback style if rarity isn't in the map
+const DEFAULT_RARITY_STYLE =
+  "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20";
+
+const RARITY_STYLES: Record<string, string> = {
+  Common: "bg-green-400/10 text-green-400 inset-ring inset-ring-green-400/20",
+  Uncommon: "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20",
+  Rare: "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
+  "Double rare":
+    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
+  "Illustration rare":
+    "bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20",
+  "Ultra Rare":
+    "bg-gray-400/10 text-gray-400 inset-ring inset-ring-gray-400/20",
+  "Special illustration rare":
+    "bg-red-400/10 text-red-400 inset-ring inset-ring-red-400/20",
+  "Mega Hyper Rare":
+    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
+  "Holo Rare V":
+    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
+  "Black White Rare": "bg-white/10 text-white inset-ring inset-ring-white/20", // note: white has no -400 scale
+};
+
+const RARITY_LABEL: Record<string, string> = {
+  Common: "C",
+  Uncommon: "U",
+  Rare: "R",
+  "Double rare": "RR",
+  "Illustration rare": "IR",
+  "Ultra Rare": "UR",
+  "Special illustration rare": "SIR",
+  "Mega Hyper Rare": "MHR",
+  "Holo Rare V": "V",
+  "Black White Rare": "BWR",
 };
 
 const labelForFinishAndArt = (finish: CardFinishType, art: CardArtVariant) => {
@@ -144,6 +194,8 @@ export default function CardList({
             localId,
           } = card as any;
 
+          const rarityStyle = RARITY_STYLES[rarity] ?? DEFAULT_RARITY_STYLE;
+
           return (
             <article
               key={`${set.id}-${id}`}
@@ -167,16 +219,16 @@ export default function CardList({
               </span>
 
               <div className="flex flex-1 flex-col gap-3">
-                <header className="flex flex-wrap items-start justify-between gap-3">
+                <header className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-4">
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400">
                       {set.name}
                     </p>
                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                       {canonicalName}
-                      {localId ? (
+                      {collectorNumber ? (
                         <span className="ml-2 text-sm font-medium text-zinc-400">
-                          #{localId}
+                          #{collectorNumber}
                         </span>
                       ) : null}
                     </h3>
@@ -184,24 +236,25 @@ export default function CardList({
                       {category}
                     </p>
                   </div>
-                  <span className="rounded-full border border-green-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
-                    {collectorNumber}
-                  </span>
-                  <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
-                    {rarity || "Unknown Rarity"}
+                  <span
+                    className={clsx(
+                      "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+                      rarityStyle
+                    )}
+                  >
+                    {RARITY_LABEL?.[rarity] || "Unknown Rarity"}
                   </span>
                 </header>
-
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 flex-row-reverse">
                   {printings.length > 0 ? (
-                    printings.map((printing) => (
+                    printings.map((printing: any) => (
                       <button
-                        key={printing.finishType}
+                        key={printing.id}
                         type="button"
                         onClick={() => onAddVariant?.(card, printing)}
-                        className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                        className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:text-black hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                       >
-                        Add{" "}
+                        +{" "}
                         {labelForFinishAndArt(
                           printing.finishType,
                           printing.artVariant

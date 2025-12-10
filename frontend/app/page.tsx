@@ -32,14 +32,17 @@ export default function Home() {
       .getAllForSet(+selectedSeries!.id, +selectedSet.id)
       .then((queriedCards) => {
         const sortedCards = queriedCards.sort(
-          (a, b) => +a.collectorNumber > +b.collectorNumber
+          (a: any, b: any) => +a.collectorNumber > +b.collectorNumber
         );
         setCards(sortedCards);
       });
   }, [selectedSeries, selectedSet]);
 
   console.log("selectedCards", selectedCards);
-  const onAddCard = (card: CardResume, printing: { finishType }) => {
+  const onAddCard = (
+    card: CardResume,
+    printing: { finishType: any; source: { id: number } }
+  ) => {
     if (!selectedCards[printing.finishType]) {
       selectedCards[printing.finishType] = [];
     }
@@ -50,23 +53,18 @@ export default function Home() {
     setSelectedCards(cardData);
 
     let tcgString = "";
-    const sourceName = (card as any)?.sources[0]?.sourceName;
+    console.log(card);
+    console.log(printing);
+    const source = (card as any)?.sources.find(
+      (s: any) => s.id === printing.source
+    );
+    const sourceName = source?.sourceName;
+    const sourceSetCode = source?.sourceSetCode;
+    console.log(source, sourceName, sourceSetCode);
     if (sourceName) {
-      tcgString = createLine(sourceName, (card as any).set.code);
+      tcgString = createLine(sourceName, sourceSetCode);
     }
 
-    // let cardName = card.name;
-    // const cardsWithName = cards.filter((c) =>
-    //   c.name.toLowerCase().includes(card.name.toLowerCase())
-    // );
-    // const numCardsWithName = cardsWithName.length;
-    // if (numCardsWithName !== 1) {
-    //   console.log("card has multiple listed", card);
-    //   const printedTotal = setNameToPrintedTotal[selectedSet!.name];
-    //   cardName = `${card.name} - ${card.localId}/${printedTotal}`;
-    // }
-
-    // const tcgString = createLine(cardName, selectedSet!.name);
     console.log(tcgString);
     if (!tcgString) {
       console.log(`Error creating TCG string: "${tcgString}"`);
@@ -117,7 +115,7 @@ export default function Home() {
             />
           ) : selectedSet === undefined ? (
             <SetList
-              selectedSeries={selectedSeries}
+              selectedSeries={selectedSeries as any}
               onSelect={(v) => setSelectedSet(v)}
               resetSeries={() => setSelectedSeries(undefined)}
             />
@@ -125,7 +123,7 @@ export default function Home() {
             <CardList
               selectedSeries={selectedSeries}
               selectedSet={selectedSet}
-              onAddVariant={onAddCard}
+              onAddVariant={onAddCard as any}
               resetSet={() => setSelectedSet(undefined)}
               cards={cards}
             />

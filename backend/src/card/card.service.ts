@@ -27,7 +27,14 @@ export class CardService {
     const cards = await this.cardRepo.find(
       { set: { id: setId, game: { key: gameKey }, series: { id: seriesId } } },
       {
-        fields: ['*', 'printings.*', 'set.*', 'sources.sourceName'],
+        fields: [
+          '*',
+          'printings.*',
+          'printings.source.id',
+          'set.*',
+          'sources.sourceName',
+          'sources.sourceSetCode',
+        ],
         populate: ['printings', 'set', 'sources'],
         populateWhere: {
           sources: {

@@ -6,6 +6,7 @@
 import { Entity, ManyToOne, Enum, Property, PrimaryKey } from '@mikro-orm/core';
 import { TcgCard } from './tcg-card.entity';
 import { CardFinishType, CardArtVariant } from './types';
+import { TcgCardSource } from './tcg-card-source.entity';
 
 @Entity({ tableName: 'tcg_card_printings' })
 export class TcgCardPrinting {
@@ -23,4 +24,7 @@ export class TcgCardPrinting {
 
   @Property({ default: true, type: 'bool' })
   isDefault!: boolean; // which printing you treat as the default in your UI
+
+  @ManyToOne(() => TcgCardSource, { nullable: true })
+  source?: TcgCardSource;
 }

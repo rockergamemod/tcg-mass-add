@@ -659,6 +659,15 @@
           "nullable": false,
           "default": "true",
           "mappedType": "boolean"
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "tcg_card_printings",
@@ -687,6 +696,19 @@
             "id"
           ],
           "referencedTableName": "public.tcg_cards",
+          "updateRule": "cascade"
+        },
+        "tcg_card_printings_source_id_foreign": {
+          "constraintName": "tcg_card_printings_source_id_foreign",
+          "columnNames": [
+            "source_id"
+          ],
+          "localTableName": "public.tcg_card_printings",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.tcg_card_sources",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
