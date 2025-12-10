@@ -86,6 +86,10 @@ const RARITY_STYLES: Record<string, string> = {
   Common: "bg-green-400/10 text-green-400 inset-ring inset-ring-green-400/20",
   Uncommon: "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20",
   Rare: "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
+  "Holo Rare": "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
+  "Rare Holo": "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
+  "Radiant Rare":
+    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
   "Double rare":
     "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
   "Illustration rare":
@@ -98,20 +102,48 @@ const RARITY_STYLES: Record<string, string> = {
     "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
   "Holo Rare V":
     "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
+  "Holo Rare VMAX":
+    "bg-purple-600/10 text-purple-600 inset-ring inset-ring-purple-600/20",
   "Black White Rare": "bg-white/10 text-white inset-ring inset-ring-white/20", // note: white has no -400 scale
+  "Hyper rare":
+    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
+  "ACE SPEC Rare":
+    "bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20",
+  "Shiny rare":
+    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
+  "Shiny Ultra Rare":
+    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
+  "Secret Rare":
+    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
+  "Classic Collection":
+    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
+  LEGEND:
+    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
 };
 
 const RARITY_LABEL: Record<string, string> = {
   Common: "C",
   Uncommon: "U",
   Rare: "R",
+  "Holo Rare": "R",
+  "Rare Holo": "R",
+  "Radiant Rare": "RR",
   "Double rare": "RR",
   "Illustration rare": "IR",
   "Ultra Rare": "UR",
   "Special illustration rare": "SIR",
   "Mega Hyper Rare": "MHR",
   "Holo Rare V": "V",
+  "Holo Rare VMAX": "VMAX",
+  "Holo Rare VSTAR": "VSTAR",
   "Black White Rare": "BWR",
+  "Hyper rare": "HR",
+  "ACE SPEC Rare": "ACE",
+  "Shiny rare": "Shiny",
+  "Shiny Ultra Rare": "Shiny UR",
+  "Secret Rare": "SR",
+  "Classic Collection": "CC",
+  LEGEND: "L",
 };
 
 const labelForFinishAndArt = (finish: CardFinishType, art: CardArtVariant) => {
@@ -236,14 +268,16 @@ export default function CardList({
                       {category}
                     </p>
                   </div>
-                  <span
-                    className={clsx(
-                      "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
-                      rarityStyle
-                    )}
-                  >
-                    {RARITY_LABEL?.[rarity] || "Unknown Rarity"}
-                  </span>
+                  {rarity !== "None" ? (
+                    <span
+                      className={clsx(
+                        "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+                        rarityStyle
+                      )}
+                    >
+                      {RARITY_LABEL?.[rarity] || "Unknown Rarity"}
+                    </span>
+                  ) : null}
                 </header>
                 <div className="flex flex-wrap gap-2 flex-row-reverse">
                   {printings.length > 0 ? (
