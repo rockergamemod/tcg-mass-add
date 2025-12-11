@@ -19,7 +19,7 @@ function cardListToTcgPlayerString() {
   baseUrl += `&c=${textData.split("\n").join("||")}`;
 }
 
-const FINISH_TYPE_LABEL = {
+const FINISH_TYPE_LABEL: Record<string, string> = {
   normal: "Normal",
   "reverse-holo": "Rev. Holo",
   holofoil: "Holo",
