@@ -17,7 +17,10 @@ async function main() {
   const allCards = await em.find(
     TcgCard,
     { sources: { source: CardSourceType.Tcgdex } },
-    { populate: ['sources'] },
+    {
+      populate: ['sources', 'set'],
+      populateWhere: { sources: { source: CardSourceType.Tcgdex } },
+    },
   );
 
   console.log(`Found ${allCards.length} cards...`);
@@ -27,8 +30,17 @@ async function main() {
     const batch = allCards.slice(i, i + batchSize);
     for (const card of batch) {
       const fullCard = await tcgdex.card.get(card.sources[0].sourceCardId);
-      card.image = fullCard?.getImageURL('low', 'png');
-      card.imageHigh = fullCard?.getImageURL('high', 'png');
+      if (fullCard) {
+        card.image = fullCard.getImageURL('low', 'png');
+        card.imageHigh = fullCard.getImageURL('high', 'png');
+      } else {
+        console.log(
+          'TCGDex mapping error, card not found: ',
+          card.canonicalName,
+          card.set.name,
+          card.sources[0].sourceCardId,
+        );
+      }
       // card.image = card.sources[0].rawExtra?.['data']['image']
       //   ? card.sources[0].rawExtra?.['data']['image'] + '/low.png'
       //   : undefined;

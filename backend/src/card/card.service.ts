@@ -41,9 +41,6 @@ export class CardService {
             source: CardSourceType.Tcgplayer,
           },
         },
-        orderBy: {
-          collectorNumber: 'ASC',
-        },
         ...queryOptions,
       },
     );

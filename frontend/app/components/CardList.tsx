@@ -219,7 +219,7 @@ export default function CardList({
                 {image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={`${image}`}
+                    src={image}
                     alt={canonicalName}
                     className="h-full w-full object-cover"
                     draggable={false}

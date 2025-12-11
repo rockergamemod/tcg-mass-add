@@ -19,6 +19,16 @@ function cardListToTcgPlayerString() {
   baseUrl += `&c=${textData.split("\n").join("||")}`;
 }
 
+const FINISH_TYPE_LABEL = {
+  normal: "Normal",
+  "reverse-holo": "Rev. Holo",
+  holofoil: "Holo",
+  "unlimited-holo": "Unlm. Holo",
+  unlimited: "Unlimited",
+  "1st-edition-holo": "1st Ed. Holo",
+  "1st-edition": "1st Ed.",
+};
+
 export default function SelectedCardList({
   finishType,
   cards,
@@ -38,7 +48,7 @@ export default function SelectedCardList({
 
   return (
     <div className="rounded-3xl bg-black text-white px-6 py-5 border border-white/10 overflow-hidden">
-      <p>{finishType}</p>
+      <p>{FINISH_TYPE_LABEL[finishType] ?? finishType}</p>
       {/* Row 1: count + arrow */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-3xl font-semibold leading-none">
@@ -50,7 +60,10 @@ export default function SelectedCardList({
       {/* Row 2: images */}
       <div className="flex items-center gap-4 overflow-x-auto">
         {visibleCards.map((card, i) => (
-          <div key={card.id ?? `${card.image}-${i}`} className="shrink-0">
+          <div
+            key={card.id ? `${card.id}-${i}` : `${card.image}-${i}`}
+            className="shrink-0"
+          >
             {card.image ? (
               <img src={card.image} alt="" className="h-20 object-cover" />
             ) : (

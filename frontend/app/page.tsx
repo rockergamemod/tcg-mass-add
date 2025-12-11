@@ -32,8 +32,10 @@ export default function Home() {
     cardsApi
       .getAllForSet(+selectedSeries!.id, +selectedSet.id)
       .then((queriedCards) => {
-        const sortedCards = queriedCards.sort(
-          (a: any, b: any) => +a.collectorNumber > +b.collectorNumber
+        const sortedCards = queriedCards.sort((a: any, b: any) =>
+          a.collectorNumber.localeCompare(b.collectorNumber, undefined, {
+            numeric: true,
+          })
         );
         setCards(sortedCards);
       });
@@ -173,36 +175,37 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              Object.entries(textData)
-                .filter(([variant]) => textData[variant].length > 0)
-                .map(([variant, text]) => {
-                  return (
-                    <div className="pt-4" key={variant}>
-                      <div className="mb-4 flex flex-wrap items-center gap-3">
-                        {copyOptions.map(({ label }) => (
-                          <button
-                            key={label}
-                            type="button"
-                            onClick={() => handleCopy(label, variant)}
-                            className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-                          >
-                            {label}
-                          </button>
-                        ))}
-                        <a
-                          key="tcg-player"
-                          href={`https://www.tcgplayer.com/massentry?c=${textData[
-                            variant
-                          ]
-                            .split("\n")
-                            .join("||")}&productline=Pokemon`}
+              Object.entries(selectedCards).map(([finishType, cards]) => {
+                return (
+                  <div
+                    className="pt-4 pb-4 border-b border-zinc-800"
+                    key={finishType}
+                  >
+                    <div className="mb-4 flex flex-wrap items-center gap-3">
+                      {copyOptions.map(({ label }) => (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => handleCopy(label, finishType)}
                           className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-                          target="_blank"
                         >
-                          Open TCGPlayer
-                        </a>
-                      </div>
-                      <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                          {label}
+                        </button>
+                      ))}
+                      <a
+                        key="tcg-player"
+                        href={`https://www.tcgplayer.com/massentry?c=${textData[
+                          finishType
+                        ]
+                          .split("\n")
+                          .join("||")}&productline=Pokemon`}
+                        className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                        target="_blank"
+                      >
+                        Open TCGPlayer
+                      </a>
+                    </div>
+                    {/* <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
                         <label
                           htmlFor="decklist-output"
                           className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
@@ -215,12 +218,17 @@ export default function Home() {
                           readOnly
                           className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
                         />
-                      </div>
-                    </div>
-                  );
-                })
+                      </div> */}
+                    <SelectedCardList
+                      key={finishType}
+                      finishType={finishType}
+                      cards={cards}
+                    />
+                  </div>
+                );
+              })
             )}
-            {Object.entries(selectedCards).map(([finishType, cards]) => {
+            {/* {Object.entries(selectedCards).map(([finishType, cards]) => {
               return (
                 <SelectedCardList
                   key={finishType}
@@ -228,7 +236,7 @@ export default function Home() {
                   cards={cards}
                 />
               );
-            })}
+            })} */}
             {copiedLabel && (
               <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
                 {copiedLabel} copied to clipboard!
