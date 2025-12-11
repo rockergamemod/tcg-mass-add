@@ -38,6 +38,9 @@ export class TcgCard {
   @Property({ type: 'string', nullable: true })
   image?: string;
 
+  @Property({ type: 'string', nullable: true })
+  imageHigh?: string;
+
   @OneToMany(() => TcgCardPrinting, (printing) => printing.card)
   printings = new Collection<TcgCardPrinting>(this);
 

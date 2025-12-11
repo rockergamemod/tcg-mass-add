@@ -65,19 +65,6 @@ const ART_VARIANT_LABEL: Record<CardArtVariant, string> = {
   [CardArtVariant.Secret]: "(Secret)",
 };
 
-const RARITY_TO_COLOR: Record<string, string> = {
-  Common: "green",
-  Uncommon: "amber",
-  Rare: "blue",
-  "Double rare": "purple",
-  "Illustration rare": "pink",
-  "Ultra Rare": "gray",
-  "Special illustration rare": "red",
-  "Mega Hyper Rare": "yellow",
-  "Holo Rare V": "purple",
-  "Black White Rare": "white",
-};
-
 // fallback style if rarity isn't in the map
 const DEFAULT_RARITY_STYLE =
   "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20";
@@ -163,11 +150,6 @@ type CardListProps = {
   onAddVariant?: (card: CardResume, variant: string) => void;
   resetSet: () => void;
 };
-
-type FetchCardsFunctionType = typeof tcgdex.card.list;
-type FetchSetReturnType = NonNullable<
-  Awaited<ReturnType<FetchCardsFunctionType>>
->;
 
 const rarityVariantMap: Record<string, string[]> = {
   Common: ["normal", "reverse"],

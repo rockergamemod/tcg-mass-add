@@ -9,6 +9,7 @@ import { CardResume, Query, SerieResume, SetResume } from "@tcgdex/sdk";
 import { createLine, setNameToPrintedTotal } from "./utils/tcgplayer";
 import React from "react";
 import { cardsApi } from "./utils/api";
+import SelectedCardList from "./components/SelectedCardList";
 
 export default function Home() {
   const [copiedLabel, setCopiedLabel] = useState("");
@@ -219,6 +220,15 @@ export default function Home() {
                   );
                 })
             )}
+            {Object.entries(selectedCards).map(([finishType, cards]) => {
+              return (
+                <SelectedCardList
+                  key={finishType}
+                  finishType={finishType}
+                  cards={cards}
+                />
+              );
+            })}
             {copiedLabel && (
               <p className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-300">
                 {copiedLabel} copied to clipboard!

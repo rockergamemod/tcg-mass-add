@@ -412,6 +412,16 @@
           "nullable": true,
           "length": 255,
           "mappedType": "string"
+        },
+        "image_high": {
+          "name": "image_high",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 255,
+          "mappedType": "string"
         }
       },
       "name": "tcg_cards",
