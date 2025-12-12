@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import tcgdex from "./utils/tcgdex";
-import SetList from "./components/SetList";
-import SeriesList from "./components/SeriesList";
-import CardList from "./components/CardList";
-import { CardResume, Query, SerieResume, SetResume } from "@tcgdex/sdk";
-import { createLine, setNameToPrintedTotal } from "./utils/tcgplayer";
-import React from "react";
-import { cardsApi } from "./utils/api";
-import SelectedCardList from "./components/SelectedCardList";
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import tcgdex from './utils/tcgdex';
+import SetList from './components/SetList';
+import SeriesList from './components/SeriesList';
+import CardList from './components/CardList';
+import { CardResume, Query, SerieResume, SetResume } from '@tcgdex/sdk';
+import { createLine, setNameToPrintedTotal } from './utils/tcgplayer';
+import React from 'react';
+import { cardsApi } from './utils/api';
+import SelectedCardList from './components/SelectedCardList';
 
 export default function Home() {
-  const [copiedLabel, setCopiedLabel] = useState("");
+  const [copiedLabel, setCopiedLabel] = useState('');
   const [textData, setTextData] = useState<Record<string, string>>({
-    holo: "",
-    reverse: "",
-    normal: "",
+    holo: '',
+    reverse: '',
+    normal: '',
   });
   const [selectedSeries, setSelectedSeries] = useState<
     SerieResume | undefined
@@ -41,21 +41,19 @@ export default function Home() {
       });
   }, [selectedSeries, selectedSet]);
 
-  console.log("selectedCards", selectedCards);
+  console.log('selectedCards', selectedCards);
   const onAddCard = (
     card: CardResume,
     printing: { finishType: any; source: { id: number } }
   ) => {
-    if (!selectedCards[printing.finishType]) {
-      selectedCards[printing.finishType] = [];
-    }
+    const existingCards = selectedCards[printing.finishType] ?? [];
     const cardData = {
       ...selectedCards,
-      [printing.finishType]: [...selectedCards[printing.finishType], card],
+      [printing.finishType]: [...existingCards, card],
     };
     setSelectedCards(cardData);
 
-    let tcgString = "";
+    let tcgString = '';
     console.log(card);
     console.log(printing);
     const source = (card as any)?.sources.find(
@@ -74,7 +72,7 @@ export default function Home() {
       return;
     }
     if (!textData[printing.finishType]) {
-      textData[printing.finishType] = "";
+      textData[printing.finishType] = '';
     }
 
     const newTextData = {
@@ -84,17 +82,17 @@ export default function Home() {
     setTextData(newTextData);
   };
 
-  const copyOptions = useMemo(() => [{ label: "Copy" }], []);
+  const copyOptions = useMemo(() => [{ label: 'Copy' }], []);
 
   const handleCopy = useCallback(
     async (label: string, variant: string) => {
       try {
-        console.log("adding to clipboard...", textData[variant]);
-        await navigator.clipboard.writeText(textData[variant]);
+        console.log('adding to clipboard...', textData[variant]);
+        await navigator.clipboard.writeText(textData[variant]!);
         setCopiedLabel(label);
-        setTimeout(() => setCopiedLabel(""), 1500);
+        setTimeout(() => setCopiedLabel(''), 1500);
       } catch (error) {
-        console.error("Unable to copy list", error);
+        console.error('Unable to copy list', error);
       }
     },
     [setCopiedLabel]
@@ -136,7 +134,7 @@ export default function Home() {
         <div className="flex flex-1 flex-col gap-6">
           <section className="flex flex-col rounded-3xl border border-zinc-200 bg-white pt-4 p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
             {Object.entries(textData).filter(
-              ([variant]) => textData[variant].length > 0
+              ([variant]) => textData[variant]!.length > 0
             ).length === 0 ? (
               <div className="pt-4">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -168,7 +166,7 @@ export default function Home() {
                   </label>
                   <textarea
                     id="decklist-output"
-                    value={""}
+                    value={''}
                     readOnly
                     className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
                   />
@@ -196,9 +194,7 @@ export default function Home() {
                         key="tcg-player"
                         href={`https://www.tcgplayer.com/massentry?c=${textData[
                           finishType
-                        ]
-                          .split("\n")
-                          .join("||")}&productline=Pokemon`}
+                        ]!.split('\n').join('||')}&productline=Pokemon`}
                         className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                         target="_blank"
                       >

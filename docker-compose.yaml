@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    restart: always
+    environment:
+      GLOBAL_PREFIX: /api
+      DB_HOST: api-db
+      DB_PORT: 15433
+      DB_USERNAME: postgres
+      DB_PASSWORD: supersecret
+      DB_NAME: mass-entry-compose
+    ports:
+      - 3000:3000
+    depends_on:
+      api-db:
+        condition: service_healthy
+
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://api:3000/api
+    restart: always
+    ports:
+      - 3001:3000
+    depends_on:
+      - api
+      - api-db
+
+  api-db:
+    image: postgres:16
+    ports:
+      - 15433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: supersecret
+      POSTGRES_DB: mass-entry-compose
+    volumes:
+      - api_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  api_db_data:

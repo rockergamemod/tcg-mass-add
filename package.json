@@ -4,10 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "nx": "nx",
-    "build": "nx run-many -t build",
-    "lint": "nx run-many -t lint",
-    "test": "nx run-many -t test"
+    "build": "turbo run build"
   },
   "repository": {
     "type": "git",
@@ -23,14 +20,6 @@
   "homepage": "https://github.com/rockergamemod/tcg-mass-add#readme",
   "devDependencies": {
     "@eslint/js": "^9.8.0",
-    "@nx/eslint": "22.2.1",
-    "@nx/eslint-plugin": "22.2.1",
-    "@nx/js": "22.2.1",
-    "@nx/nest": "^22.2.1",
-    "@nx/next": "^22.2.1",
-    "@nx/vite": "22.2.1",
-    "@nx/vitest": "22.2.1",
-    "@nx/workspace": "^22.2.1",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@swc-node/register": "~1.9.1",
