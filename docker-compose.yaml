@@ -10,7 +10,8 @@ services:
     environment:
       GLOBAL_PREFIX: /api
       DB_HOST: api-db
-      DB_PORT: 15433
+      # Use the container port (5432); the host-mapped port 15433 is only for local access
+      DB_PORT: 5432
       DB_USERNAME: postgres
       DB_PASSWORD: supersecret
       DB_NAME: mass-entry-compose
@@ -26,7 +27,7 @@ services:
       context: .
       dockerfile: ./apps/frontend/Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: http://api:3000/api
+        NEXT_PUBLIC_API_URL: http://localhost:3000/api
     restart: always
     ports:
       - 3001:3000
