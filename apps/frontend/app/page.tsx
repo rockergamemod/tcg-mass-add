@@ -9,6 +9,7 @@ import React from 'react';
 import { cardsApi } from './utils/api';
 import SelectedCardList from './components/SelectedCardList';
 import AcknowledgmentModal from './components/AcknowledgmentModal';
+import CardRemovalModal from './components/CardRemovalModal';
 import {
   type TcgSetDto,
   type TcgCardDto,
@@ -34,6 +35,10 @@ export default function Home() {
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const isHandlingPopState = useRef(false);
   const sidebarGifRef = useRef<HTMLImageElement>(null);
+  const [removalModalOpen, setRemovalModalOpen] = useState(false);
+  const [removalModalFinishType, setRemovalModalFinishType] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     if (!selectedSet) {
@@ -101,6 +106,32 @@ export default function Home() {
     }
   }, [selectedSeries, selectedSet]);
 
+  const rebuildTextDataForFinishType = useCallback(
+    (finishType: string, cards: TcgCardDto[]) => {
+      const lines: string[] = [];
+      for (const card of cards) {
+        const printing = card.printings?.find(
+          (p) => p.finishType === finishType
+        );
+        if (!printing) continue;
+
+        const source = (card as any)?.sources?.find(
+          (s: any) => s.id === printing.source
+        );
+        const sourceName = source?.sourceName;
+        const sourceSetCode = source?.sourceSetCode;
+        if (sourceName) {
+          const tcgString = createLine(sourceName, sourceSetCode);
+          if (tcgString) {
+            lines.push(tcgString);
+          }
+        }
+      }
+      return lines.join('\n') + (lines.length > 0 ? '\n' : '');
+    },
+    []
+  );
+
   const onAddCard = (
     card: TcgCardDto,
     printing: TcgCardDto['printings'][number]
@@ -137,6 +168,31 @@ export default function Home() {
     setTextData(newTextData);
   };
 
+  const onRemoveCard = useCallback(
+    (finishType: string, cardToRemove: TcgCardDto, index: number) => {
+      const existingCards = selectedCards[finishType] ?? [];
+      const updatedCards = existingCards.filter((_, i) => i !== index);
+
+      const updatedSelectedCards = {
+        ...selectedCards,
+        [finishType]: updatedCards,
+      };
+      setSelectedCards(updatedSelectedCards);
+
+      // Rebuild textData for this finishType
+      const newTextDataForFinishType = rebuildTextDataForFinishType(
+        finishType,
+        updatedCards
+      );
+      const newTextData = {
+        ...textData,
+        [finishType]: newTextDataForFinishType,
+      };
+      setTextData(newTextData);
+    },
+    [selectedCards, textData, rebuildTextDataForFinishType]
+  );
+
   const copyOptions = useMemo(() => [{ label: 'Copy' }], []);
 
   const handleCopy = useCallback(
@@ -169,6 +225,20 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 dark:bg-black dark:text-zinc-50">
       <AcknowledgmentModal onAcknowledge={handleModalAcknowledge} />
+      {removalModalFinishType && (
+        <CardRemovalModal
+          isOpen={removalModalOpen}
+          onClose={() => {
+            setRemovalModalOpen(false);
+            setRemovalModalFinishType(null);
+          }}
+          cards={selectedCards[removalModalFinishType] ?? []}
+          finishType={removalModalFinishType}
+          onRemoveCard={(card, index) => {
+            onRemoveCard(removalModalFinishType, card, index);
+          }}
+        />
+      )}
       <main className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col justify-center px-8 py-16 lg:flex-row lg:items-stretch lg:gap-12">
         <section className="flex flex-1 flex-col justify-start gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
           <h1 className="text-4xl font-semibold leading-tight tracking-tight">
@@ -325,6 +395,13 @@ export default function Home() {
                       key={finishType}
                       finishType={finishType}
                       cards={cards}
+                      onRemoveCard={(card, index) =>
+                        onRemoveCard(finishType, card, index)
+                      }
+                      onShowAll={() => {
+                        setRemovalModalFinishType(finishType);
+                        setRemovalModalOpen(true);
+                      }}
                     />
                   </div>
                 );
