@@ -133,39 +133,81 @@ export default function Home() {
               ([variant]) => textData[variant]!.length > 0
             ).length === 0 ? (
               <div className="pt-4">
-                <div className="mb-4 flex flex-wrap items-center gap-3">
-                  {copyOptions.map(({ label }) => (
-                    <button
-                      key={label}
-                      type="button"
-                      className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-                    >
-                      {label}
-                    </button>
-                  ))}
-                  <a
-                    key="tcg-player"
-                    aria-disabled
-                    href=""
-                    className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-                    target="_blank"
-                  >
-                    Open TCGPlayer
-                  </a>
-                </div>
-                <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                  <label
-                    htmlFor="decklist-output"
-                    className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
-                  >
-                    Generated Output
-                  </label>
-                  <textarea
-                    id="decklist-output"
-                    value={''}
-                    readOnly
-                    className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
-                  />
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-8 dark:border-zinc-800 dark:bg-zinc-900">
+                  <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                    How to Use
+                  </h2>
+                  <ol className="space-y-4 text-zinc-600 dark:text-zinc-400">
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
+                        1
+                      </span>
+                      <span>
+                        Select a{' '}
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                          Series
+                        </strong>{' '}
+                        from the list on the left
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
+                        2
+                      </span>
+                      <span>
+                        Choose a{' '}
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                          Set
+                        </strong>{' '}
+                        from that series
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
+                        3
+                      </span>
+                      <span>
+                        Click on the{' '}
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                          card variants
+                        </strong>{' '}
+                        you want to add (Normal, Reverse Holo, Holo, etc.)
+                      </span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
+                        4
+                      </span>
+                      <span>
+                        Once you've added cards, you can{' '}
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                          copy
+                        </strong>{' '}
+                        the list or{' '}
+                        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                          Open TCGPlayer
+                        </strong>{' '}
+                        to automatically fill in the Mass Entry form
+                      </span>
+                    </li>
+                  </ol>
+                  <div className="mt-6 rounded-xl border border-zinc-300 bg-zinc-100 p-4 dark:border-zinc-700 dark:bg-zinc-800">
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300">
+                      <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+                        Note:
+                      </strong>{' '}
+                      Due to the way TCGPlayer's Mass Entry works, the
+                      finish/printing of the card cannot be automatically
+                      populated. You will need to manually select the finish
+                      (Holo, Reverse Holo, 1st Edition, etc.) based on the cards
+                      you are adding. Unforunately, until TCGPlayer updates
+                      their API this is an unavoidable limitation.
+                    </p>
+                    <p className="pt-2 text-sm text-zinc-700 dark:text-zinc-300">
+                      Ultimately this means you will have to manually un-select
+                      the printings from the popup on the Mass Entry form.
+                    </p>
+                  </div>
                 </div>
               </div>
             ) : (
