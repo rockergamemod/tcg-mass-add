@@ -40,22 +40,14 @@ export default function NavBar() {
         </div>
 
         {/* Right side links */}
-        <div className="flex flex-1 items-center justify-end gap-4">
-          {/* <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            <Image
-              src="/icons/github.svg"
-              alt="GitHub"
-              width={20}
-              height={20}
-              className="h-5 w-5"
+        <div className="flex flex-1 items-center justify-end gap-4 ">
+          <a href="https://www.buymeacoffee.com/rockergaming" target="_blank">
+            <img
+              src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
+              alt="Buy Me A Coffee"
+              style={{ height: '60px !important', width: '217px !important' }}
             />
-            <span>GitHub</span>
-          </a> */}
+          </a>
         </div>
       </div>
     </nav>
