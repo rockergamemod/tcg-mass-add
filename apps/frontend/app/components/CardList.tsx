@@ -1,141 +1,131 @@
+import React from 'react';
+import clsx from 'clsx'; // optional but nice
 import {
-  CardResume,
-  Query,
-  SerieResume,
-  SetResume,
-  type Card,
-} from "@tcgdex/sdk";
-import { useEffect, useState } from "react";
-import tcgdex from "../utils/tcgdex";
-import React from "react";
-import clsx from "clsx"; // optional but nice
-
-type VariantKey = keyof NonNullable<Card["variants"]>;
-
-const VARIANT_LABELS: Record<VariantKey, string> = {
-  normal: "Normal",
-  reverse: "Reverse",
-  holo: "Holo",
-  firstEdition: "1st Edition",
-};
+  type TcgCardDto,
+  type TcgSeriesDto,
+  type TcgSetDto,
+} from '@repo/shared-types';
 
 export enum CardFinishType {
-  Normal = "normal",
-  Holo = "holofoil",
-  ReverseHolo = "reverse-holo",
-  Unlimited = "unlimited",
-  UnlimitedHolo = "unlimited-holo",
-  FirstEdition = "1st-edition",
-  FirstEditionHolo = "1st-edition-holo",
+  Normal = 'normal',
+  Holo = 'holofoil',
+  ReverseHolo = 'reverse-holo',
+  Unlimited = 'unlimited',
+  UnlimitedHolo = 'unlimited-holo',
+  FirstEdition = '1st-edition',
+  FirstEditionHolo = '1st-edition-holo',
   // Extend as needed
 }
 
 const FINISH_LABELS: Record<CardFinishType, string> = {
-  [CardFinishType.Normal]: "Normal",
-  [CardFinishType.Holo]: "Holo",
-  [CardFinishType.ReverseHolo]: "Reverse Holo",
-  [CardFinishType.Unlimited]: "Unlimited",
-  [CardFinishType.UnlimitedHolo]: "Unlimited Holo",
-  [CardFinishType.FirstEdition]: "1st Edition",
-  [CardFinishType.FirstEditionHolo]: "1st Edition Holo",
+  [CardFinishType.Normal]: 'Normal',
+  [CardFinishType.Holo]: 'Holo',
+  [CardFinishType.ReverseHolo]: 'Reverse Holo',
+  [CardFinishType.Unlimited]: 'Unlimited',
+  [CardFinishType.UnlimitedHolo]: 'Unlimited Holo',
+  [CardFinishType.FirstEdition]: '1st Edition',
+  [CardFinishType.FirstEditionHolo]: '1st Edition Holo',
 };
 
 export enum CardArtVariant {
-  Normal = "normal",
-  IllustrationRare = "illustration-rare",
-  SpecialIllustrationRare = "special-illustration-rare",
-  AltArt = "alt-art",
-  AltFullArt = "alt-full-art",
-  AltArtSecret = "alt-art-secret",
-  PokeBall = "poke-ball",
-  MasterBall = "master-ball",
-  Secret = "secret",
+  Normal = 'normal',
+  IllustrationRare = 'illustration-rare',
+  SpecialIllustrationRare = 'special-illustration-rare',
+  AltArt = 'alt-art',
+  AltFullArt = 'alt-full-art',
+  AltArtSecret = 'alt-art-secret',
+  PokeBall = 'poke-ball',
+  MasterBall = 'master-ball',
+  Secret = 'secret',
   // Extend as needed
 }
 
 const ART_VARIANT_LABEL: Record<CardArtVariant, string> = {
-  [CardArtVariant.Normal]: "",
-  [CardArtVariant.IllustrationRare]: "(IR)",
-  [CardArtVariant.SpecialIllustrationRare]: "(SIR)",
-  [CardArtVariant.AltArt]: "(Alt Art)",
-  [CardArtVariant.AltFullArt]: "(Alt Full Art)",
-  [CardArtVariant.AltArtSecret]: "(Alt Art Secret)",
-  [CardArtVariant.PokeBall]: "(Pokeball)",
-  [CardArtVariant.MasterBall]: "(Masterball)",
-  [CardArtVariant.Secret]: "(Secret)",
+  [CardArtVariant.Normal]: '',
+  [CardArtVariant.IllustrationRare]: '(IR)',
+  [CardArtVariant.SpecialIllustrationRare]: '(SIR)',
+  [CardArtVariant.AltArt]: '(Alt Art)',
+  [CardArtVariant.AltFullArt]: '(Alt Full Art)',
+  [CardArtVariant.AltArtSecret]: '(Alt Art Secret)',
+  [CardArtVariant.PokeBall]: '(Pokeball)',
+  [CardArtVariant.MasterBall]: '(Masterball)',
+  [CardArtVariant.Secret]: '(Secret)',
 };
 
 // fallback style if rarity isn't in the map
 const DEFAULT_RARITY_STYLE =
-  "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20";
+  'bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20';
 
 const RARITY_STYLES: Record<string, string> = {
-  Common: "bg-green-400/10 text-green-400 inset-ring inset-ring-green-400/20",
-  Uncommon: "bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20",
-  Rare: "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
-  "Holo Rare": "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
-  "Rare Holo": "bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20",
-  "Radiant Rare":
-    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
-  "Double rare":
-    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
-  "Illustration rare":
-    "bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20",
-  "Ultra Rare":
-    "bg-gray-400/10 text-gray-400 inset-ring inset-ring-gray-400/20",
-  "Special illustration rare":
-    "bg-red-400/10 text-red-400 inset-ring inset-ring-red-400/20",
-  "Mega Hyper Rare":
-    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
-  "Holo Rare V":
-    "bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20",
-  "Holo Rare VMAX":
-    "bg-purple-600/10 text-purple-600 inset-ring inset-ring-purple-600/20",
-  "Black White Rare": "bg-white/10 text-white inset-ring inset-ring-white/20", // note: white has no -400 scale
-  "Hyper rare":
-    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
-  "ACE SPEC Rare":
-    "bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20",
-  "Shiny rare":
-    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
-  "Shiny Ultra Rare":
-    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
-  "Secret Rare":
-    "bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20",
-  "Classic Collection":
-    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
+  Common: 'bg-green-400/10 text-green-400 inset-ring inset-ring-green-400/20',
+  Uncommon: 'bg-amber-400/10 text-amber-400 inset-ring inset-ring-amber-400/20',
+  Rare: 'bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20',
+  'Holo Rare': 'bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20',
+  'Rare Holo': 'bg-blue-400/10 text-blue-400 inset-ring inset-ring-blue-400/20',
+  'Radiant Rare':
+    'bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20',
+  'Double rare':
+    'bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20',
+  'Illustration rare':
+    'bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20',
+  'Ultra Rare':
+    'bg-gray-400/10 text-gray-400 inset-ring inset-ring-gray-400/20',
+  'Special illustration rare':
+    'bg-red-400/10 text-red-400 inset-ring inset-ring-red-400/20',
+  'Mega Hyper Rare':
+    'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
+  'Holo Rare V':
+    'bg-purple-400/10 text-purple-400 inset-ring inset-ring-purple-400/20',
+  'Holo Rare VMAX':
+    'bg-purple-600/10 text-purple-600 inset-ring inset-ring-purple-600/20',
+  'Black White Rare': 'bg-white/10 text-white inset-ring inset-ring-white/20', // note: white has no -400 scale
+  'Hyper rare':
+    'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
+  'ACE SPEC Rare':
+    'bg-pink-400/10 text-pink-400 inset-ring inset-ring-pink-400/20',
+  'Shiny rare':
+    'bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20',
+  'Shiny Ultra Rare':
+    'bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20',
+  'Secret Rare':
+    'bg-orange-400/10 text-orange-400 inset-ring inset-ring-orange-400/20',
+  'Classic Collection':
+    'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
   LEGEND:
-    "bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20",
+    'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
 };
 
 const RARITY_LABEL: Record<string, string> = {
-  Common: "C",
-  Uncommon: "U",
-  Rare: "R",
-  "Holo Rare": "R",
-  "Rare Holo": "R",
-  "Radiant Rare": "RR",
-  "Double rare": "RR",
-  "Illustration rare": "IR",
-  "Ultra Rare": "UR",
-  "Special illustration rare": "SIR",
-  "Mega Hyper Rare": "MHR",
-  "Holo Rare V": "V",
-  "Holo Rare VMAX": "VMAX",
-  "Holo Rare VSTAR": "VSTAR",
-  "Black White Rare": "BWR",
-  "Hyper rare": "HR",
-  "ACE SPEC Rare": "ACE",
-  "Shiny rare": "Shiny",
-  "Shiny Ultra Rare": "Shiny UR",
-  "Secret Rare": "SR",
-  "Classic Collection": "CC",
-  LEGEND: "L",
+  Common: 'C',
+  Uncommon: 'U',
+  Rare: 'R',
+  'Holo Rare': 'R',
+  'Rare Holo': 'R',
+  'Radiant Rare': 'RR',
+  'Double rare': 'RR',
+  'Illustration rare': 'IR',
+  'Ultra Rare': 'UR',
+  'Special illustration rare': 'SIR',
+  'Mega Hyper Rare': 'MHR',
+  'Holo Rare V': 'V',
+  'Holo Rare VMAX': 'VMAX',
+  'Holo Rare VSTAR': 'VSTAR',
+  'Black White Rare': 'BWR',
+  'Hyper rare': 'HR',
+  'ACE SPEC Rare': 'ACE',
+  'Shiny rare': 'Shiny',
+  'Shiny Ultra Rare': 'Shiny UR',
+  'Secret Rare': 'SR',
+  'Classic Collection': 'CC',
+  LEGEND: 'L',
 };
 
-const labelForFinishAndArt = (finish: CardFinishType, art: CardArtVariant) => {
+const labelForFinishAndArt = (
+  finish: CardFinishType,
+  art: CardArtVariant | undefined
+) => {
   const finishLabel = FINISH_LABELS[finish];
-  if (art === CardArtVariant.Normal) {
+  if (art === CardArtVariant.Normal || art === undefined) {
     return finishLabel;
   }
 
@@ -144,39 +134,17 @@ const labelForFinishAndArt = (finish: CardFinishType, art: CardArtVariant) => {
 };
 
 type CardListProps = {
-  cards: CardResume[];
-  selectedSeries: SerieResume;
-  selectedSet: SetResume;
-  onAddVariant?: (card: CardResume, variant: string) => void;
+  cards: TcgCardDto[];
+  selectedSeries: TcgSeriesDto;
+  selectedSet: TcgSetDto;
+  onAddVariant: (
+    card: TcgCardDto,
+    variant: TcgCardDto['printings'][number]
+  ) => void;
   resetSet: () => void;
 };
 
-const rarityVariantMap: Record<string, string[]> = {
-  Common: ["normal", "reverse"],
-  Uncommon: ["normal", "reverse"],
-  Rare: ["holo", "reverse"],
-  "Double rare": ["holo"],
-  "Illustration rare": ["holo"],
-  "Ultra Rare": ["holo"],
-  "Special illustration rare": ["holo"],
-  "Black White Rare": ["holo"],
-  // SV
-  "Hyper rare": ["holo"],
-  "ACE SPEC Rare": ["holo"],
-  // MEGA
-  "Mega Hyper Rare": ["holo"],
-  // SWSH
-  "Holo Rare V": ["holo"],
-  "Holo Rare VSTAR": ["holo"],
-  "Holo Rare": ["holo"],
-  "Radiant Rare": ["holo"],
-  "Holo Rare VMAX": ["holo"],
-  "Secret Rare": ["holo"],
-};
-
 export default function CardList({
-  selectedSeries,
-  selectedSet,
   onAddVariant,
   resetSet,
   cards,
@@ -203,10 +171,8 @@ export default function CardList({
             collectorNumber,
             set,
             rarity,
-            category,
             printings,
-            localId,
-          } = card as any;
+          } = card;
 
           const rarityStyle = RARITY_STYLES[rarity] ?? DEFAULT_RARITY_STYLE;
 
@@ -246,31 +212,28 @@ export default function CardList({
                         </span>
                       ) : null}
                     </h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                      {category}
-                    </p>
                   </div>
-                  {rarity !== "None" ? (
+                  {rarity !== 'None' ? (
                     <span
                       className={clsx(
-                        "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+                        'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
                         rarityStyle
                       )}
                     >
-                      {RARITY_LABEL?.[rarity] || "Unknown Rarity"}
+                      {RARITY_LABEL?.[rarity] || 'Unknown Rarity'}
                     </span>
                   ) : null}
                 </header>
                 <div className="flex flex-wrap gap-2 flex-row-reverse">
                   {printings.length > 0 ? (
-                    printings.map((printing: any) => (
+                    printings.map((printing) => (
                       <button
                         key={printing.id}
                         type="button"
-                        onClick={() => onAddVariant?.(card, printing)}
+                        onClick={() => onAddVariant(card, printing)}
                         className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:text-black hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
                       >
-                        +{" "}
+                        +{' '}
                         {labelForFinishAndArt(
                           printing.finishType,
                           printing.artVariant

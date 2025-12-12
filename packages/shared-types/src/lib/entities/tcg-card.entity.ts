@@ -6,6 +6,8 @@ import {
   Collection,
   Unique,
   PrimaryKey,
+  EntityDTO,
+  Loaded,
 } from '@mikro-orm/core';
 import { TcgCardPrinting } from './tcg-card-printing.entity';
 import { TcgCardSource } from './tcg-card-source.entity';
@@ -26,8 +28,8 @@ export class TcgCard {
   @Property({ type: 'string' })
   canonicalName!: string; // Your normalized display name, e.g. 'Gloom'
 
-  @Property({ type: 'string', nullable: true })
-  rarity?: string;
+  @Property({ type: 'string' })
+  rarity!: string;
 
   @Property({ type: 'string', nullable: true })
   supertype?: string; // e.g. 'Pokémon'
@@ -47,3 +49,6 @@ export class TcgCard {
   @OneToMany(() => TcgCardSource, (source) => source.card)
   sources = new Collection<TcgCardSource>(this);
 }
+
+// Include full printings collection instead of just printing ids
+export type TcgCardDto = EntityDTO<Loaded<TcgCard, 'printings' | 'sources'>>;

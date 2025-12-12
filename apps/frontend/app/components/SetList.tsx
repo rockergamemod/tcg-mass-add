@@ -1,30 +1,24 @@
-import { Suspense, useEffect, useState } from "react";
-import tcgdex from "../utils/tcgdex";
-import SetListCard from "./SetListCard";
-import { SerieResume, SetResume } from "@tcgdex/sdk";
-import React from "react";
-import { setApi } from "../utils/api";
+import { Suspense, useEffect, useState } from 'react';
+import SetListCard from './SetListCard';
+import React from 'react';
+import { setApi } from '../utils/api';
+import { type TcgSetDto, type TcgSeriesDto } from '@repo/shared-types';
 
 type SetListProps = {
-  onSelect: (set: SetResume) => void;
+  onSelect: (set: TcgSetDto) => void;
   resetSeries: () => void;
-  selectedSeries: SerieResume & { gameKey: string };
+  selectedSeries: TcgSeriesDto;
 };
-type FetchSetsFunctionType = typeof tcgdex.fetchSets;
-type FetchSetReturnType = NonNullable<
-  Awaited<ReturnType<FetchSetsFunctionType>>
->;
 
 export default function SetList({
   onSelect,
   selectedSeries,
   resetSeries,
 }: SetListProps) {
-  const [setData, setSetData] = useState<FetchSetReturnType>([]);
+  const [setData, setSetData] = useState<TcgSetDto[]>([]);
   useEffect(() => {
     console.log(selectedSeries);
     setApi.getAll(+selectedSeries.id).then((data) => {
-      // tcgdex.fetchSets(selectedSeries.id).then((data) => {
       if (data) {
         console.log(data);
         setSetData(data);

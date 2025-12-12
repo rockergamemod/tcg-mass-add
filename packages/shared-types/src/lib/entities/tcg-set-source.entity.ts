@@ -6,6 +6,7 @@ import {
   ManyToOne,
   Unique,
   Enum,
+  EntityDTO,
 } from '@mikro-orm/core';
 import { TcgSet } from './tcg-set.entity';
 import { CardSourceType } from '../enums';
@@ -38,3 +39,5 @@ export class TcgSetSource {
   @Property({ type: 'bool', default: true })
   isPrimary!: boolean;
 }
+
+export type TcgSetSourceDto = EntityDTO<TcgSetSource>;

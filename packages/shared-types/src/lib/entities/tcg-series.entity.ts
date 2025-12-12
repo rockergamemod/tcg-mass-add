@@ -7,6 +7,7 @@ import {
   OneToMany,
   Collection,
   Unique,
+  EntityDTO,
 } from '@mikro-orm/core';
 import { TcgGame } from './tcg-game.entity';
 import { TcgSet } from './tcg-set.entity';
@@ -43,3 +44,5 @@ export class TcgSeries {
   @OneToMany(() => TcgSet, (set) => set.series)
   sets = new Collection<TcgSet>(this);
 }
+
+export type TcgSeriesDto = EntityDTO<TcgSeries>;

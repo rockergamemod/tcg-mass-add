@@ -1,15 +1,18 @@
 'use client';
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import tcgdex from './utils/tcgdex';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import SetList from './components/SetList';
 import SeriesList from './components/SeriesList';
 import CardList from './components/CardList';
-import { CardResume, Query, SerieResume, SetResume } from '@tcgdex/sdk';
-import { createLine, setNameToPrintedTotal } from './utils/tcgplayer';
+import { createLine } from './utils/tcgplayer';
 import React from 'react';
 import { cardsApi } from './utils/api';
 import SelectedCardList from './components/SelectedCardList';
+import {
+  type TcgSetDto,
+  type TcgCardDto,
+  type TcgSeriesDto,
+} from '@repo/shared-types';
 
 export default function Home() {
   const [copiedLabel, setCopiedLabel] = useState('');
@@ -19,14 +22,14 @@ export default function Home() {
     normal: '',
   });
   const [selectedSeries, setSelectedSeries] = useState<
-    SerieResume | undefined
+    TcgSeriesDto | undefined
   >();
-  const [selectedSet, setSelectedSet] = useState<SetResume | undefined>();
+  const [selectedSet, setSelectedSet] = useState<TcgSetDto | undefined>();
   const [selectedCards, setSelectedCards] = useState<
-    Record<string, CardResume[]>
+    Record<string, TcgCardDto[]>
   >({});
 
-  const [cards, setCards] = useState<CardResume[]>([]);
+  const [cards, setCards] = useState<TcgCardDto[]>([]);
   useEffect(() => {
     if (!selectedSet) return;
     cardsApi
@@ -43,8 +46,8 @@ export default function Home() {
 
   console.log('selectedCards', selectedCards);
   const onAddCard = (
-    card: CardResume,
-    printing: { finishType: any; source: { id: number } }
+    card: TcgCardDto,
+    printing: TcgCardDto['printings'][number]
   ) => {
     const existingCards = selectedCards[printing.finishType] ?? [];
     const cardData = {
@@ -116,7 +119,7 @@ export default function Home() {
             />
           ) : selectedSet === undefined ? (
             <SetList
-              selectedSeries={selectedSeries as any}
+              selectedSeries={selectedSeries}
               onSelect={(v) => setSelectedSet(v)}
               resetSeries={() => setSelectedSeries(undefined)}
             />

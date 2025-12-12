@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  EntityDTO,
   Enum,
   OneToMany,
   PrimaryKey,
@@ -23,3 +24,5 @@ export class TcgGame {
   @OneToMany(() => TcgSet, (set) => set.game)
   sets = new Collection<TcgSet>(this);
 }
+
+export type TcgGameDto = EntityDTO<TcgGame>;

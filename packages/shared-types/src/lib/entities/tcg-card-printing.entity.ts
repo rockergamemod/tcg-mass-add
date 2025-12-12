@@ -3,7 +3,14 @@
  * ============================
  */
 
-import { Entity, ManyToOne, Enum, Property, PrimaryKey } from '@mikro-orm/core';
+import {
+  Entity,
+  ManyToOne,
+  Enum,
+  Property,
+  PrimaryKey,
+  EntityDTO,
+} from '@mikro-orm/core';
 import { CardFinishType, CardArtVariant } from '../enums';
 import { TcgCardSource } from './tcg-card-source.entity';
 import { TcgCard } from './tcg-card.entity';
@@ -28,3 +35,5 @@ export class TcgCardPrinting {
   @ManyToOne(() => TcgCardSource, { nullable: true })
   source?: TcgCardSource;
 }
+
+export type TcgCardPrintingDto = EntityDTO<TcgCardPrinting>;

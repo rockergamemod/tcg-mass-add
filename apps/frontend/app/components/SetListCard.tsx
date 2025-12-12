@@ -1,9 +1,9 @@
-import { SetResume } from "@tcgdex/sdk";
-import React from "react";
+import { type TcgSetDto } from '@repo/shared-types';
+import React from 'react';
 
 type SetListCardProps = {
-  set: SetResume;
-  onSelect: (set: SetResume) => void;
+  set: TcgSetDto;
+  onSelect: (set: TcgSetDto) => void;
   isActive?: boolean;
 };
 
@@ -13,7 +13,7 @@ export default function SetListCard({
   isActive = false,
 }: SetListCardProps) {
   const { id, name, logo } = set;
-  const logoUrl = logo?.endsWith(".png") ? logo : `${logo}.png`;
+  const logoUrl = logo?.endsWith('.png') ? logo : `${logo}.png`;
 
   return (
     <button
@@ -21,8 +21,8 @@ export default function SetListCard({
       onClick={() => onSelect(set)}
       className={`group flex w-full items-center gap-4 rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
         isActive
-          ? "border-emerald-400 bg-emerald-50 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-100"
-          : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+          ? 'border-emerald-400 bg-emerald-50 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-100'
+          : 'border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100'
       }`}
     >
       <span className="flex h-14 aspect-[5/2] items-center justify-center overflow-hidden rounded-xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">

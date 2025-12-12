@@ -11,6 +11,7 @@ import {
   Property,
   PrimaryKey,
   Unique,
+  EntityDTO,
 } from '@mikro-orm/core';
 
 import { CardSourceType } from '../enums';
@@ -46,3 +47,5 @@ export class TcgCardSource {
   @Property({ type: 'bool', default: false })
   isPrimary!: boolean; // your chosen primary mapping for that source
 }
+
+export type TcgCardSourceDto = EntityDTO<TcgCardSource>;
