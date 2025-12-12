@@ -101,9 +101,6 @@ export default function Home() {
       <AcknowledgmentModal />
       <main className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col justify-center px-8 py-16 lg:flex-row lg:items-stretch lg:gap-12">
         <section className="flex flex-1 flex-col justify-center gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
-          <p className="inline-flex items-center rounded-full bg-zinc-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
-            TCGplayer Mass Add
-          </p>
           <h1 className="text-4xl font-semibold leading-tight tracking-tight">
             Build and paste a cardlist in seconds.
           </h1>
