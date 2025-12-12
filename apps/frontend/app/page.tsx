@@ -264,6 +264,7 @@ export default function Home() {
               resetSet={() => setSelectedSet(undefined)}
               cards={cards}
               isLoading={isLoadingCards}
+              selectedCards={selectedCards}
             />
           )}
         </section>

@@ -146,6 +146,7 @@ type CardListProps = {
   ) => void;
   resetSet: () => void;
   isLoading?: boolean;
+  selectedCards?: Record<string, TcgCardDto[]>;
 };
 
 export default function CardList({
@@ -154,6 +155,7 @@ export default function CardList({
   cards,
   selectedSet,
   isLoading = false,
+  selectedCards = {},
 }: CardListProps) {
   if (isLoading) {
     return (
@@ -274,20 +276,31 @@ export default function CardList({
                 </header>
                 <div className="flex flex-wrap gap-2 flex-row-reverse">
                   {printings.length > 0 ? (
-                    printings.map((printing) => (
-                      <button
-                        key={printing.id}
-                        type="button"
-                        onClick={() => onAddVariant(card, printing)}
-                        className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:text-black hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-                      >
-                        +{' '}
-                        {labelForFinishAndArt(
-                          printing.finishType,
-                          printing.artVariant
-                        )}
-                      </button>
-                    ))
+                    printings.map((printing) => {
+                      // Count how many times this specific card has been added for this finishType
+                      const cardsForFinishType =
+                        selectedCards[printing.finishType] ?? [];
+                      const count = cardsForFinishType.filter(
+                        (selectedCard) => selectedCard.id === card.id
+                      ).length;
+
+                      const label = labelForFinishAndArt(
+                        printing.finishType,
+                        printing.artVariant
+                      );
+
+                      return (
+                        <button
+                          key={printing.id}
+                          type="button"
+                          onClick={() => onAddVariant(card, printing)}
+                          className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-900 transition hover:text-black hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                        >
+                          + {label}
+                          {count > 0 && ` [${count}]`}
+                        </button>
+                      );
+                    })
                   ) : (
                     <span className="text-xs font-medium text-zinc-400">
                       No variants listed for this card.

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Mass Entry Tool | Rockerg Gaming',
+  title: 'Mass Entry Tool | Rocker Gaming',
   description: "A tool to help add cards to TCGPlayer's Mass-Entry.",
 };
 
@@ -29,6 +29,7 @@ export default function RootLayout({
       {/* Cloudflare Web Analytics */}
       <script
         defer
+        async={true}
         src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon='{"token": "e937fff367ab4eb99f13fb94379633a3"}'
       ></script>
