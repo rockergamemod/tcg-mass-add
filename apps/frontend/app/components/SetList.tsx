@@ -17,10 +17,8 @@ export default function SetList({
 }: SetListProps) {
   const [setData, setSetData] = useState<TcgSetDto[]>([]);
   useEffect(() => {
-    console.log(selectedSeries);
     setApi.getAll(+selectedSeries.id).then((data) => {
       if (data) {
-        console.log(data);
         setSetData(data);
       }
     });

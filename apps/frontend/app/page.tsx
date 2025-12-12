@@ -44,7 +44,6 @@ export default function Home() {
       });
   }, [selectedSeries, selectedSet]);
 
-  console.log('selectedCards', selectedCards);
   const onAddCard = (
     card: TcgCardDto,
     printing: TcgCardDto['printings'][number]
@@ -57,19 +56,15 @@ export default function Home() {
     setSelectedCards(cardData);
 
     let tcgString = '';
-    console.log(card);
-    console.log(printing);
     const source = (card as any)?.sources.find(
       (s: any) => s.id === printing.source
     );
     const sourceName = source?.sourceName;
     const sourceSetCode = source?.sourceSetCode;
-    console.log(source, sourceName, sourceSetCode);
     if (sourceName) {
       tcgString = createLine(sourceName, sourceSetCode);
     }
 
-    console.log(tcgString);
     if (!tcgString) {
       console.log(`Error creating TCG string: "${tcgString}"`);
       return;
@@ -90,10 +85,9 @@ export default function Home() {
   const handleCopy = useCallback(
     async (label: string, variant: string) => {
       try {
-        console.log('adding to clipboard...', textData[variant]);
         await navigator.clipboard.writeText(textData[variant]!);
         setCopiedLabel(label);
-        setTimeout(() => setCopiedLabel(''), 1500);
+        setTimeout(() => setCopiedLabel('Copied'), 1500);
       } catch (error) {
         console.error('Unable to copy list', error);
       }
@@ -204,20 +198,6 @@ export default function Home() {
                         Open TCGPlayer
                       </a>
                     </div>
-                    {/* <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                        <label
-                          htmlFor="decklist-output"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500"
-                        >
-                          Generated Output [{variant}]
-                        </label>
-                        <textarea
-                          id="decklist-output"
-                          value={textData[variant]}
-                          readOnly
-                          className="h-64 w-full resize-none rounded-xl bg-white p-4 font-mono text-sm leading-snug text-zinc-900 outline-none ring-0 focus-visible:ring-2 focus-visible:ring-emerald-300 dark:bg-black dark:text-zinc-50"
-                        />
-                      </div> */}
                     <SelectedCardList
                       key={finishType}
                       finishType={finishType}

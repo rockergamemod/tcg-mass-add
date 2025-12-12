@@ -93,6 +93,8 @@ const RARITY_STYLES: Record<string, string> = {
     'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
   LEGEND:
     'bg-yellow-400/10 text-yellow-400 inset-ring inset-ring-yellow-400/20',
+  'Full Art Trainer':
+    'bg-red-400/10 text-red-400 inset-ring inset-ring-red-400/20',
 };
 
 const RARITY_LABEL: Record<string, string> = {
@@ -118,6 +120,7 @@ const RARITY_LABEL: Record<string, string> = {
   'Secret Rare': 'SR',
   'Classic Collection': 'CC',
   LEGEND: 'L',
+  'Full Art Trainer': 'TG',
 };
 
 const labelForFinishAndArt = (
