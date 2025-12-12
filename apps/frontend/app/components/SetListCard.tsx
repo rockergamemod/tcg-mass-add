@@ -41,7 +41,9 @@ export default function SetListCard({
         )}
       </span>
       <span className="flex flex-1 flex-col">
-        <span className="text-sm font-semibold">{name}</span>
+        <span className="text-sm font-semibold group-hover:text-black">
+          {name}
+        </span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">
           Tap to add cards from this set
         </span>

@@ -33,6 +33,7 @@ export default function Home() {
   const [cards, setCards] = useState<TcgCardDto[]>([]);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const isHandlingPopState = useRef(false);
+  const sidebarGifRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (!selectedSet) {
@@ -151,9 +152,23 @@ export default function Home() {
     [setCopiedLabel]
   );
 
+  const handleModalAcknowledge = useCallback(() => {
+    // Restart the sidebar GIF by forcing a reload
+    if (sidebarGifRef.current) {
+      const img = sidebarGifRef.current;
+      const src = img.src;
+      // Clear and reset the src to force reload
+      img.src = '';
+      // Use setTimeout to ensure the browser processes the change
+      setTimeout(() => {
+        img.src = src;
+      }, 10);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 dark:bg-black dark:text-zinc-50">
-      <AcknowledgmentModal />
+      <AcknowledgmentModal onAcknowledge={handleModalAcknowledge} />
       <main className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col justify-center px-8 py-16 lg:flex-row lg:items-stretch lg:gap-12">
         <section className="flex flex-1 flex-col justify-start gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
           <h1 className="text-4xl font-semibold leading-tight tracking-tight">
@@ -193,6 +208,17 @@ export default function Home() {
                   <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
                     How to Use
                   </h2>
+                  <div className="mb-6">
+                    <p className="mb-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                      Demo of using the app:
+                    </p>
+                    <img
+                      ref={sidebarGifRef}
+                      src="/demo/tcg-mass-add-2.gif"
+                      alt="Demo of TCGplayer Mass Add app"
+                      className="w-full rounded-lg border border-zinc-200 dark:border-zinc-800"
+                    />
+                  </div>
                   <ol className="space-y-4 text-zinc-600 dark:text-zinc-400">
                     <li className="flex gap-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">

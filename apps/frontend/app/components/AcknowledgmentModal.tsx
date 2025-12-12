@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react';
 
 const ACKNOWLEDGMENT_KEY = 'tcgplayer-mass-add-intro-acknowledged';
 
-export default function AcknowledgmentModal() {
+interface AcknowledgmentModalProps {
+  onAcknowledge?: () => void;
+}
+
+export default function AcknowledgmentModal({
+  onAcknowledge,
+}: AcknowledgmentModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -18,6 +24,10 @@ export default function AcknowledgmentModal() {
   const handleAcknowledge = () => {
     localStorage.setItem(ACKNOWLEDGMENT_KEY, 'true');
     setIsOpen(false);
+    // Trigger callback to restart sidebar GIF
+    if (onAcknowledge) {
+      onAcknowledge();
+    }
   };
 
   if (!isOpen) return null;
