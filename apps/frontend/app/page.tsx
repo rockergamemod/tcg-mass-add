@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import SetList from './components/SetList';
 import SeriesList from './components/SeriesList';
 import CardList from './components/CardList';
@@ -32,6 +32,8 @@ export default function Home() {
 
   const [cards, setCards] = useState<TcgCardDto[]>([]);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
+  const isHandlingPopState = useRef(false);
+
   useEffect(() => {
     if (!selectedSet) {
       setCards([]);
@@ -49,6 +51,53 @@ export default function Home() {
         setCards(sortedCards);
         setIsLoadingCards(false);
       });
+  }, [selectedSeries, selectedSet]);
+
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = () => {
+      isHandlingPopState.current = true;
+      // If we have a selected set, reset it (go back to set list)
+      if (selectedSet) {
+        setSelectedSet(undefined);
+      }
+      // If we have a selected series but no set, reset series (go back to series list)
+      else if (selectedSeries) {
+        setSelectedSeries(undefined);
+      }
+      // Reset flag after state updates
+      setTimeout(() => {
+        isHandlingPopState.current = false;
+      }, 0);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [selectedSeries, selectedSet]);
+
+  // Push history states when navigating forward (but not when handling popstate)
+  useEffect(() => {
+    if (isHandlingPopState.current) {
+      return;
+    }
+
+    if (selectedSet && selectedSeries) {
+      // Push state when set is selected
+      window.history.pushState(
+        { type: 'set', seriesId: selectedSeries.id, setId: selectedSet.id },
+        '',
+        window.location.href
+      );
+    } else if (selectedSeries) {
+      // Push state when series is selected
+      window.history.pushState(
+        { type: 'series', seriesId: selectedSeries.id },
+        '',
+        window.location.href
+      );
+    }
   }, [selectedSeries, selectedSet]);
 
   const onAddCard = (
