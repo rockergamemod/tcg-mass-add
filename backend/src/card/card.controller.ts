@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { CardService } from './card.service';
-import { GameKey } from 'src/infra/database/types';
+import { GameKey } from '@tcgplayer-mass-add/shared-types';
 
 @Controller()
 export class CardController {

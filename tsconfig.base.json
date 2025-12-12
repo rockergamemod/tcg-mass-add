@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@tcgplayer-mass-add/shared-types": ["libs/shared-types/src/index.ts"]
+    }
+  }
+}

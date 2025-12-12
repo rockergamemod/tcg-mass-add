@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -13,13 +14,15 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@tcgplayer-mass-add/shared-types": ["../libs/shared-types/src/index.ts"]
     }
   },
   "include": [

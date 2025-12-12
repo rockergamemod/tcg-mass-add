@@ -7,18 +7,14 @@ import TCGdex from '@tcgdex/sdk';
 import mikroOrmConfig from 'src/mikro-orm.config';
 import {
   TcgCard,
-  TcgCardPrinting,
   TcgCardSource,
   TcgGame,
   TcgSet,
-} from 'src/infra/database';
-import { TcgSeries } from 'src/infra/database/tcg-series.entity';
-import {
-  CardFinishType,
+  TcgSeries,
   CardSourceType,
   TcgSetType,
-} from 'src/infra/database/types';
-import { TcgSetSource } from 'src/infra/database/tcg-set-source.entity';
+  TcgSetSource,
+} from '@tcgplayer-mass-add/shared-types';
 
 export async function loadTcgDexSeries(
   em: EntityManager,
@@ -187,7 +183,6 @@ export async function loadTcgDexCardsForSet(
         rarity: dexCardFull2.rarity,
         supertype: dexCardFull2.category,
         subtype: dexCardFull2.stage,
-        printings: [],
         image: dexCardFull2.getImageURL('low', 'png'),
         imageHigh: dexCardFull2.getImageURL('high', 'png'),
       });

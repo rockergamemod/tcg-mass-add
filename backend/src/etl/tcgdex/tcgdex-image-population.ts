@@ -1,6 +1,5 @@
 import { MikroORM } from '@mikro-orm/core';
-import { TcgCard, TcgCardSource } from 'src/infra/database';
-import { CardSourceType } from 'src/infra/database/types';
+import { TcgCard, CardSourceType } from '@tcgplayer-mass-add/shared-types';
 import mikroOrmConfig from 'src/mikro-orm.config';
 import TCGdex from '@tcgdex/sdk';
 
@@ -29,7 +28,11 @@ async function main() {
     console.log(`On batch #${i}...`);
     const batch = allCards.slice(i, i + batchSize);
     for (const card of batch) {
-      const fullCard = await tcgdex.card.get(card.sources[0].sourceCardId);
+      const sourceCardId = card?.sources?.[0].sourceCardId;
+      if (!sourceCardId) {
+        continue;
+      }
+      const fullCard = await tcgdex.card.get(sourceCardId);
       if (fullCard) {
         card.image = fullCard.getImageURL('low', 'png');
         card.imageHigh = fullCard.getImageURL('high', 'png');
@@ -38,7 +41,7 @@ async function main() {
           'TCGDex mapping error, card not found: ',
           card.canonicalName,
           card.set.name,
-          card.sources[0].sourceCardId,
+          sourceCardId,
         );
       }
       // card.image = card.sources[0].rawExtra?.['data']['image']

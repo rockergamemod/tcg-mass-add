@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { SetService } from './set.service';
-import { GameKey } from 'src/infra/database/types';
+import { GameKey } from '@tcgplayer-mass-add/shared-types';
 
 @Controller()
 export class SetController {

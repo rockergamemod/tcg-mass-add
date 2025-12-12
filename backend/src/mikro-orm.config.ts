@@ -12,11 +12,11 @@ import {
   TcgCardPrinting,
   TcgCardSource,
   TcgSet,
-} from './infra/database';
+} from '@tcgplayer-mass-add/shared-types';
 import { Migrator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
-import { TcgSeries } from './infra/database/tcg-series.entity';
-import { TcgSetSource } from './infra/database/tcg-set-source.entity';
+import { TcgSeries } from '../../libs/shared-types/src/lib/entities/tcg-series.entity';
+import { TcgSetSource } from '../../libs/shared-types/src/lib/entities/tcg-set-source.entity';
 
 export default defineConfig({
   entities: [

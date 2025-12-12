@@ -1,0 +1,1752 @@
+{
+  "10288647858775905483libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "test-ci--src/lib/shared-types.spec.ts": {
+        "command": "vitest run src/lib/shared-types.spec.ts",
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest Tests in src/lib/shared-types.spec.ts",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "test-ci": {
+        "executor": "nx:noop",
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "dependsOn": [
+          "test-ci--src/lib/shared-types.spec.ts"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest Tests in CI",
+          "nonAtomizedTarget": "test",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": [
+          "test-ci",
+          "test-ci--src/lib/shared-types.spec.ts"
+        ]
+      }
+    },
+    "projectType": "library"
+  },
+  "10288647858775905483libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "test-ci--src/lib/shared-types.spec.ts": {
+        "command": "vitest run src/lib/shared-types.spec.ts",
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest Tests in src/lib/shared-types.spec.ts",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "test-ci": {
+        "executor": "nx:noop",
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "dependsOn": [
+          "test-ci--src/lib/shared-types.spec.ts"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest Tests in CI",
+          "nonAtomizedTarget": "test",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": [
+          "test-ci",
+          "test-ci--src/lib/shared-types.spec.ts"
+        ]
+      }
+    },
+    "projectType": "library"
+  },
+  "16988173215022593012libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "16988173215022593012libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "12352361282976401434libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "12352361282976401434libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9846729739383755810libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9846729739383755810libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "3617816977244367443libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "3617816977244367443libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "1320863569289632689libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "1320863569289632689libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "14819214028886376496libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "14819214028886376496libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "10254036290362258114libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "10254036290362258114libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "12473227997898630910libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "12473227997898630910libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "17308420387339975508libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "17308420387339975508libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "850601245309069687libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "850601245309069687libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "5702586684507954901libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "5702586684507954901libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "6755193358953379054libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "6755193358953379054libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9918709998206781816libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9918709998206781816libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9913598878346196899libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "9913598878346196899libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "4907267876860813706libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "4907267876860813706libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "3054193325685574302libs/shared-types/vitest.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  },
+  "3054193325685574302libs/shared-types/vite.config.ts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared-types"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared-types"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "npx vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "targetGroups": {
+        "TEST (CI)": []
+      }
+    },
+    "projectType": "library"
+  }
+}

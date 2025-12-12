@@ -1,8 +1,11 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository, Populate } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { TcgCard } from 'src/infra/database';
-import { CardSourceType, GameKey } from 'src/infra/database/types';
+import {
+  CardSourceType,
+  TcgCard,
+  GameKey,
+} from '@tcgplayer-mass-add/shared-types';
 
 @Injectable()
 export class CardService {

@@ -1,0 +1,6 @@
+> nx run shared-types:build
+
+Compiling TypeScript files for project "shared-types"...
+Done compiling TypeScript files for project "shared-types".
+
+[2m../../dist/libs/shared-types/README.md[22m

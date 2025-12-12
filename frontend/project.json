@@ -1,0 +1,26 @@
+{
+  "name": "frontend",
+  "root": "frontend",
+  "sourceRoot": "frontend",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npm run dev", "cwd": "frontend" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npm run build", "cwd": "frontend" },
+      "dependsOn": ["^build"]
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npm run start", "cwd": "frontend" }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npm run lint", "cwd": "frontend" }
+    }
+  },
+  "tags": []
+}

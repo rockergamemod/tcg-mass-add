@@ -1,7 +1,6 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { TcgGame } from '../infra/database';
-import { GameKey } from '../infra/database/types';
+import { TcgGame, GameKey } from '@tcgplayer-mass-add/shared-types';
 
 export class TcgGamesSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {

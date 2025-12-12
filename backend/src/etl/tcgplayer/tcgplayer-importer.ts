@@ -1,18 +1,17 @@
 import { EntityManager, MikroORM } from '@mikro-orm/postgresql';
 import { parseTcgplayerCsv, TcgplayerCsvRow } from './tcgplayer-csv-parser';
+
 import {
   CardArtVariant,
   CardFinishType,
   CardSourceType,
   GameKey,
-} from 'src/infra/database/types';
-import {
   TcgCard,
   TcgCardPrinting,
   TcgCardSource,
   TcgGame,
   TcgSet,
-} from 'src/infra/database';
+} from '@tcgplayer-mass-add/shared-types';
 import mikroOrmConfig from 'src/mikro-orm.config';
 
 function debugPrint(...thingToPrint: any) {

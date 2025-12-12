@@ -1,7 +1,7 @@
 import { MikroORM } from '@mikro-orm/core';
 import mikroOrmConfig from 'src/mikro-orm.config';
 import TCGdex from '@tcgdex/sdk';
-import { TcgSeries } from 'src/infra/database/tcg-series.entity';
+import { TcgSeries } from '@tcgplayer-mass-add/shared-types';
 
 async function main() {
   const orm = await MikroORM.init(mikroOrmConfig);
