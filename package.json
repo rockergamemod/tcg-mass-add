@@ -31,6 +31,8 @@
     "@nx/vite": "22.2.1",
     "@nx/vitest": "22.2.1",
     "@nx/workspace": "^22.2.1",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
@@ -42,10 +44,15 @@
     "nx": "^22.2.1",
     "prettier": "^2.6.2",
     "tslib": "^2.3.0",
+    "turbo": "^2.6.3",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
     "vite": "^7.0.0",
     "vitest": "^4.0.0"
   },
-  "dependencies": {}
+  "packageManager": "npm@11.6.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
