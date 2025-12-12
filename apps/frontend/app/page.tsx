@@ -31,8 +31,13 @@ export default function Home() {
   >({});
 
   const [cards, setCards] = useState<TcgCardDto[]>([]);
+  const [isLoadingCards, setIsLoadingCards] = useState(false);
   useEffect(() => {
-    if (!selectedSet) return;
+    if (!selectedSet) {
+      setCards([]);
+      return;
+    }
+    setIsLoadingCards(true);
     cardsApi
       .getAllForSet(+selectedSeries!.id, +selectedSet.id)
       .then((queriedCards) => {
@@ -42,6 +47,7 @@ export default function Home() {
           })
         );
         setCards(sortedCards);
+        setIsLoadingCards(false);
       });
   }, [selectedSeries, selectedSet]);
 
@@ -100,9 +106,9 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 dark:bg-black dark:text-zinc-50">
       <AcknowledgmentModal />
       <main className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col justify-center px-8 py-16 lg:flex-row lg:items-stretch lg:gap-12">
-        <section className="flex flex-1 flex-col justify-center gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
+        <section className="flex flex-1 flex-col justify-start gap-6 rounded-3xl border border-zinc-200 bg-white p-8 shadow-lg shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
           <h1 className="text-4xl font-semibold leading-tight tracking-tight">
-            Build and paste a cardlist in seconds.
+            Build your master set in seconds.
           </h1>
           {selectedSeries === undefined ? (
             <SeriesList
@@ -123,12 +129,13 @@ export default function Home() {
               onAddVariant={onAddCard as any}
               resetSet={() => setSelectedSet(undefined)}
               cards={cards}
+              isLoading={isLoadingCards}
             />
           )}
         </section>
 
         <div className="flex flex-1 flex-col gap-6">
-          <section className="flex flex-col rounded-3xl border border-zinc-200 bg-white pt-4 p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
+          <section className="sticky top-20 z-30 flex max-h-[calc(100vh-5rem)] flex-col overflow-y-auto rounded-3xl border border-zinc-200 bg-white pt-4 p-8 shadow-xl shadow-emerald-100/70 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none">
             {Object.entries(textData).filter(
               ([variant]) => textData[variant]!.length > 0
             ).length === 0 ? (

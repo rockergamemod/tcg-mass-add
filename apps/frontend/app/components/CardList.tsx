@@ -145,25 +145,70 @@ type CardListProps = {
     variant: TcgCardDto['printings'][number]
   ) => void;
   resetSet: () => void;
+  isLoading?: boolean;
 };
 
 export default function CardList({
   onAddVariant,
   resetSet,
   cards,
+  selectedSet,
+  isLoading = false,
 }: CardListProps) {
+  if (isLoading) {
+    return (
+      <>
+        <div className="flex ">
+          <button
+            type="button"
+            onClick={resetSet}
+            className="cursor-pointer"
+            style={{ cursor: 'pointer' }}
+          >
+            &#8592; Back
+          </button>
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-emerald-600 dark:border-zinc-800 dark:border-t-emerald-400"></div>
+        </div>
+      </>
+    );
+  }
+
   if (!cards || !cards.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
-        No cards available yet. Pick a set to start browsing cards.
-      </div>
+      <>
+        <div className="flex ">
+          <button
+            type="button"
+            onClick={resetSet}
+            className="cursor-pointer"
+            style={{ cursor: 'pointer' }}
+          >
+            &#8592; Back
+          </button>
+        </div>
+        <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+          No cards available yet. Pick a set to start browsing cards.
+        </div>
+      </>
     );
   }
 
   return (
     <>
-      <div className="flex ">
-        <button onClick={resetSet}>&#8592; Back</button>
+      <div className="flex justify-between items-center">
+        <button
+          type="button"
+          onClick={resetSet}
+          className="cursor-pointer"
+          style={{ cursor: 'pointer' }}
+        >
+          &#8592; Back
+        </button>
+        {selectedSet.logo ? (
+          <img src={selectedSet.logo} className="h-8 " />
+        ) : null}
       </div>
       <div className="flex flex-col gap-4">
         {cards.map((card) => {
