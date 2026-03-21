@@ -301,6 +301,7 @@ const setNameOverride: Map<string, string> = new Map([
   // ["McDonald's Promos 2023", "Macdonald's Collection 2011"],
   // ["McDonald's Promos 2024", "Macdonald's Collection 2011"],
   ['ME: Mega Evolution Promo', 'MEP Black Star Promos'],
+  ['ME: Ascended Heroes', 'Ascended Heroes'],
   // ['MEE: Mega Evolution Energies', ''],
   // ['Miscellaneous Cards & Products', ''],
   // ['My First Battle', ''],

@@ -244,7 +244,10 @@ async function main() {
     });
     console.log(`Loaded ${sets.length} sets.`);
 
-    for (const set of sets) {
+    for (const [setIndex, set] of sets.entries()) {
+      console.log(
+        `Loading set ${setIndex + 1}/${sets.length}: ${set.name}...`,
+      );
       const cards = await loadTcgDexCardsForSet(em, tcgdex, set, {
         shouldSkipCards,
       });
