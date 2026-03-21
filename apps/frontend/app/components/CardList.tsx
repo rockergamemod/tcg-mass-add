@@ -146,7 +146,10 @@ type CardListProps = {
   ) => void;
   resetSet: () => void;
   isLoading?: boolean;
-  selectedCards?: Record<string, TcgCardDto[]>;
+  selectedCards?: Record<
+    string,
+    [TcgCardDto, TcgCardDto['printings'][number]][]
+  >;
 };
 
 export default function CardList({
@@ -277,11 +280,14 @@ export default function CardList({
                 <div className="flex flex-wrap gap-2 flex-row-reverse">
                   {printings.length > 0 ? (
                     printings.map((printing) => {
-                      // Count how many times this specific card has been added for this finishType
-                      const cardsForFinishType =
+                      // Count how many times this specific card+printing combination has been added
+                      // by iterating through the tuples in selectedCards
+                      const tuplesForFinishType =
                         selectedCards[printing.finishType] ?? [];
-                      const count = cardsForFinishType.filter(
-                        (selectedCard) => selectedCard.id === card.id
+                      const count = tuplesForFinishType.filter(
+                        ([selectedCard, selectedPrinting]) =>
+                          selectedCard.id === card.id &&
+                          selectedPrinting.id === printing.id
                       ).length;
 
                       const label = labelForFinishAndArt(

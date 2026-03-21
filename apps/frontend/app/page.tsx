@@ -27,8 +27,9 @@ export default function Home() {
     TcgSeriesDto | undefined
   >();
   const [selectedSet, setSelectedSet] = useState<TcgSetDto | undefined>();
+  // Store tuples of [card, printing] to track which specific printing was used
   const [selectedCards, setSelectedCards] = useState<
-    Record<string, TcgCardDto[]>
+    Record<string, [TcgCardDto, TcgCardDto['printings'][number]][]>
   >({});
 
   const [cards, setCards] = useState<TcgCardDto[]>([]);
@@ -107,14 +108,12 @@ export default function Home() {
   }, [selectedSeries, selectedSet]);
 
   const rebuildTextDataForFinishType = useCallback(
-    (finishType: string, cards: TcgCardDto[]) => {
+    (
+      finishType: string,
+      cardPrintingTuples: [TcgCardDto, TcgCardDto['printings'][number]][]
+    ) => {
       const lines: string[] = [];
-      for (const card of cards) {
-        const printing = card.printings?.find(
-          (p) => p.finishType === finishType
-        );
-        if (!printing) continue;
-
+      for (const [card, printing] of cardPrintingTuples) {
         const source = (card as any)?.sources?.find(
           (s: any) => s.id === printing.source
         );
@@ -136,10 +135,14 @@ export default function Home() {
     card: TcgCardDto,
     printing: TcgCardDto['printings'][number]
   ) => {
-    const existingCards = selectedCards[printing.finishType] ?? [];
+    const existingTuples = selectedCards[printing.finishType] ?? [];
+    const newTuple: [TcgCardDto, TcgCardDto['printings'][number]] = [
+      card,
+      printing,
+    ];
     const cardData = {
       ...selectedCards,
-      [printing.finishType]: [...existingCards, card],
+      [printing.finishType]: [...existingTuples, newTuple],
     };
     setSelectedCards(cardData);
 
@@ -170,19 +173,19 @@ export default function Home() {
 
   const onRemoveCard = useCallback(
     (finishType: string, cardToRemove: TcgCardDto, index: number) => {
-      const existingCards = selectedCards[finishType] ?? [];
-      const updatedCards = existingCards.filter((_, i) => i !== index);
+      const existingTuples = selectedCards[finishType] ?? [];
+      const updatedTuples = existingTuples.filter((_, i) => i !== index);
 
       const updatedSelectedCards = {
         ...selectedCards,
-        [finishType]: updatedCards,
+        [finishType]: updatedTuples,
       };
       setSelectedCards(updatedSelectedCards);
 
       // Rebuild textData for this finishType
       const newTextDataForFinishType = rebuildTextDataForFinishType(
         finishType,
-        updatedCards
+        updatedTuples
       );
       const newTextData = {
         ...textData,
@@ -232,7 +235,9 @@ export default function Home() {
             setRemovalModalOpen(false);
             setRemovalModalFinishType(null);
           }}
-          cards={selectedCards[removalModalFinishType] ?? []}
+          cards={
+            selectedCards[removalModalFinishType]?.map(([card]) => card) ?? []
+          }
           finishType={removalModalFinishType}
           onRemoveCard={(card, index) => {
             onRemoveCard(removalModalFinishType, card, index);
@@ -364,7 +369,8 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              Object.entries(selectedCards).map(([finishType, cards]) => {
+              Object.entries(selectedCards).map(([finishType, tuples]) => {
+                const cards = tuples.map(([card]) => card);
                 return (
                   <div
                     className="pt-4 pb-4 border-b border-zinc-800"
