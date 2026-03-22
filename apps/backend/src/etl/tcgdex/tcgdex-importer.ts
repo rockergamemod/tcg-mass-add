@@ -28,11 +28,13 @@ export async function loadTcgDexSeries(
 
   // If skipping the series, just return the existing ones, dont do any real work.
   if (options.shouldSkipSeries) {
+    console.log('Skipping series');
     return em.findAll(TcgSeries);
   }
 
   const series = await tcgdex.fetch('series');
   if (series === undefined) {
+    console.log('No series found from TCGDex, skipping...');
     return [];
   }
   const tcgSeries: TcgSeries[] = [];
@@ -46,6 +48,7 @@ export async function loadTcgDexSeries(
     if (existingSeries && detailedSeries) {
       existingSeries.releaseDate = (detailedSeries as any).releaseDate;
       em.persist(existingSeries);
+      tcgSeries.push(existingSeries);
       continue;
     }
 
@@ -90,8 +93,16 @@ export async function loadTcgDexSetsForSeries(
   if (sets === undefined) {
     return [];
   }
+
+  const existingSets = await em.find(TcgSet, { series: series });
+
   const tcgSets: TcgSet[] = [];
   for (const set of sets) {
+    if (existingSets.find((s) => s.name === set.name)) {
+      console.log(`Set ${set.name} already exists, skipping...`);
+      continue;
+    }
+
     // Fetch the setDetails for each set
     const fetchedSet = await tcgdex.fetch('sets', set.id);
     if (!fetchedSet) {
@@ -245,9 +256,7 @@ async function main() {
     console.log(`Loaded ${sets.length} sets.`);
 
     for (const [setIndex, set] of sets.entries()) {
-      console.log(
-        `Loading set ${setIndex + 1}/${sets.length}: ${set.name}...`,
-      );
+      console.log(`Loading set ${setIndex + 1}/${sets.length}: ${set.name}...`);
       const cards = await loadTcgDexCardsForSet(em, tcgdex, set, {
         shouldSkipCards,
       });
