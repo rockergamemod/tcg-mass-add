@@ -62,4 +62,3 @@ pnpm-debug.log*
 *.pem
 
 exported_data
-.cursor/
