@@ -103,6 +103,19 @@ export async function loadTcgDexSetsForSeries(
       continue;
     }
 
+    // Unique on (source, source_set_id): same TCGdex id may appear under another
+    // series or twice in the API list; never insert a second row for the same id.
+    const existingSource = await em.findOne(TcgSetSource, {
+      source: CardSourceType.Tcgdex,
+      sourceSetId: set.id,
+    });
+    if (existingSource) {
+      console.log(
+        `TCGDex set id ${set.id} (${set.name}) already mapped, skipping...`,
+      );
+      continue;
+    }
+
     // Fetch the setDetails for each set
     const fetchedSet = await tcgdex.fetch('sets', set.id);
     if (!fetchedSet) {

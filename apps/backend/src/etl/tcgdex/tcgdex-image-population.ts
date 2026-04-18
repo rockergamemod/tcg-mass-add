@@ -15,19 +15,30 @@ async function main() {
 
   const allCards = await em.find(
     TcgCard,
-    { sources: { source: CardSourceType.Tcgdex } },
+    {
+      sources: { source: CardSourceType.Tcgdex },
+      $or: [
+        { image: null },
+        { image: '' },
+        { imageHigh: null },
+        { imageHigh: '' },
+      ],
+    },
     {
       populate: ['sources', 'set'],
       populateWhere: { sources: { source: CardSourceType.Tcgdex } },
     },
   );
 
-  console.log(`Found ${allCards.length} cards...`);
+  console.log(`Found ${allCards.length} cards needing images...`);
 
   for (let i = 0; i < allCards.length; i += batchSize) {
     console.log(`On batch #${i}...`);
     const batch = allCards.slice(i, i + batchSize);
     for (const card of batch) {
+      if (card.image?.trim() && card.imageHigh?.trim()) {
+        continue;
+      }
       const sourceCardId = card?.sources?.[0].sourceCardId;
       if (!sourceCardId) {
         continue;
