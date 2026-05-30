@@ -37,4 +37,10 @@ cd apps/backend
 DB_PORT=15433 npm run etl:load:all -- /path/to/tcgplayer-csv
 ```
 
+For the deployed server...
+
+```bash
+env $(cat .env.production | xargs) npm run --workspace=backend etl:load:all /path/to/data.csv
+```
+
 Done!
