@@ -516,6 +516,10 @@ async function findSetByTcgPlayerSetName(
   return null;
 }
 
+function resolveSetCode(setName: string, liveSetCodeMap: Map<string, string>): string | undefined {
+  return liveSetCodeMap.get(setName) ?? SET_CODE_MAP[setName];
+}
+
 export async function importTcgplayerCsvRows(
   em: EntityManager,
   rows: TcgplayerCsvRow[],
@@ -533,6 +537,25 @@ export async function importTcgplayerCsvRows(
     where: { source: CardSourceType.Tcgplayer },
   });
   console.log(`Fetched ${allSources.length} CardSources`);
+
+  let liveSetCodeMap: Map<string, string> = new Map();
+  try {
+    const response = await fetch('https://mpapi.tcgplayer.com/v2/massentry/sets/3?mpfev=5489');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.results && Array.isArray(data.results)) {
+      for (const result of data.results) {
+        if (result.name && result.code) {
+          liveSetCodeMap.set(result.name, result.code);
+        }
+      }
+    }
+    console.log(`Fetched ${liveSetCodeMap.size} set codes from TCGPlayer API`);
+  } catch (err) {
+    console.warn('Failed to fetch live TCGPlayer set codes, falling back to static SET_CODE_MAP:', err);
+  }
 
   let counter = 0;
 
@@ -604,7 +627,7 @@ export async function importTcgplayerCsvRows(
         card,
         source: CardSourceType.Tcgplayer,
         sourceCardId: row.tcgplayerProductId,
-        sourceSetCode: SET_CODE_MAP[row.setName],
+        sourceSetCode: resolveSetCode(row.setName, liveSetCodeMap),
         sourceSetName: row.setName,
         sourceName: row.productName,
         rawExtra: { data: row },
@@ -612,7 +635,7 @@ export async function importTcgplayerCsvRows(
       });
       em.persist(source);
     } else {
-      source.sourceSetCode = SET_CODE_MAP[row.setName];
+      source.sourceSetCode = resolveSetCode(row.setName, liveSetCodeMap);
       em.persist(source);
     }
 
